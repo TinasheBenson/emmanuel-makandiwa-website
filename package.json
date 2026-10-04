@@ -30,6 +30,7 @@
     "node": ">=22"
   },
   "devDependencies": {
+    "hyperframes": "^0.8.124",
     "playwright": "^1.63.0",
     "sharp": "^0.35.5"
   }

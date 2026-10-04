@@ -61,6 +61,17 @@ Entries with `placeholder: true` are design samples and show a "Sample" tag. **D
 
 `src/styles/tokens.css` holds every colour, type and motion token. The current values are **placeholders** until the existing site's logo, colours and fonts are audited. Swap them there and the whole site follows.
 
+## Background films
+
+`video/film-template.html` is a [HyperFrames](https://github.com/heygen-com/hyperframes) composition: slow push-ins across photographs, light-leak sweeps on every cut and a seeded gold-dust field, built as a seamless loop. `video/render.mjs` stamps out one composition per film (image lists at the top of the file), renders it, and encodes 1280×720 WebM/MP4 loops (~200 KB / ~600 KB) into `public/video/`.
+
+```sh
+npm run video:render            # all films
+npm run video:render -- hero    # one film
+```
+
+Requires FFmpeg and a Chrome headless shell (`npx hyperframes browser ensure`, or point `HYPERFRAMES_BROWSER_PATH` at an existing one). Films only download on the `full` motion tier or when a visitor taps "Play film".
+
 ## QA
 
 ```sh
