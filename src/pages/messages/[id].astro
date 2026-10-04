@@ -31,7 +31,7 @@ const more = (await getCollection('messages'))
         {placeholder && <span class="tag-sample">Sample</span>}
       </div>
       <div class="container msg-hero__copy">
-        <a href="/messages/" class="back link-underline" data-reveal="fade">← All messages</a>
+        <a href="/messages/" class="back link-underline" data-reveal="fade">All messages</a>
         <p class="eyebrow" data-reveal="fade">{series ?? 'Message'} · <time datetime={date.toISOString()}>{fmt.format(date)}</time></p>
         <h1 class="msg-hero__title" data-split="hero">{title}</h1>
       </div>
@@ -50,7 +50,7 @@ const more = (await getCollection('messages'))
     <div class="container">
       <div class="section-head">
         <h2 class="section-title" data-split>More messages</h2>
-        <a class="btn btn--ghost" href="/messages/">See all</a>
+        <a class="btn btn--ghost" href="/messages/"><span>All messages</span></a>
       </div>
       <div class="more">{more.map((m) => <MessageCard entry={m} />)}</div>
     </div>
@@ -78,7 +78,7 @@ const more = (await getCollection('messages'))
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(rgb(13 18 32 / 0.35), rgb(13 18 32 / 0.92));
+    background: linear-gradient(rgb(20 18 16 / 0.35), rgb(20 18 16 / 0.92));
   }
   .msg-hero__copy {
     position: relative;
@@ -89,6 +89,8 @@ const more = (await getCollection('messages'))
   .back {
     display: inline-block;
     margin-bottom: 2rem;
+    font-family: var(--ff-ui);
+    font-weight: 600;
     font-size: var(--fs-small);
   }
   .msg-hero__title {

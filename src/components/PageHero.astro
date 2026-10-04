@@ -5,24 +5,20 @@ import type { ImageMetadata } from 'astro';
 interface Props {
   eyebrow: string;
   title: string;
-  accent?: string;
   lead?: string;
   image?: ImageMetadata;
   imageAlt?: string;
   transitionName?: string;
 }
 
-const { eyebrow, title, accent, lead, image, imageAlt = '', transitionName } = Astro.props;
+const { eyebrow, title, lead, image, imageAlt = '', transitionName } = Astro.props;
 ---
 
-<section class:list={['page-hero grain', { 'page-hero--media': image }]}>
+<section class:list={['page-hero', { 'page-hero--media': image }]}>
   <div class="container page-hero__inner">
     <div class="page-hero__copy">
       <p class="eyebrow" data-reveal="fade">{eyebrow}</p>
-      <h1 class="page-hero__title" data-split="hero">
-        {title}
-        {accent && <><br /><span class="italic">{accent}</span></>}
-      </h1>
+      <h1 class="page-hero__title" data-split="hero">{title}</h1>
       {lead && <p class="lead dim page-hero__lead" data-reveal="up">{lead}</p>}
       <slot />
     </div>
@@ -40,11 +36,10 @@ const { eyebrow, title, accent, lead, image, imageAlt = '', transitionName } = A
   .page-hero {
     position: relative;
     overflow: hidden;
-    padding-top: calc(var(--header-h) + clamp(4rem, 10vw, 9rem));
+    padding-top: calc(var(--header-h) + clamp(4rem, 10vw, 8rem));
     padding-bottom: clamp(3rem, 7vw, 6rem);
-    background:
-      radial-gradient(80% 60% at 85% 0%, color-mix(in oklab, var(--c-accent) 18%, transparent), transparent 70%),
-      var(--c-ink);
+    background: var(--c-ink);
+    border-bottom: 1px solid var(--c-line);
   }
   .page-hero__inner {
     display: grid;
@@ -57,9 +52,10 @@ const { eyebrow, title, accent, lead, image, imageAlt = '', transitionName } = A
   .page-hero__title {
     font-size: var(--fs-h1);
     margin-bottom: 1.75rem;
+    max-width: 14ch;
   }
   .page-hero__lead {
-    max-width: 40rem;
+    max-width: 38rem;
   }
   .page-hero__media {
     aspect-ratio: 4 / 5;

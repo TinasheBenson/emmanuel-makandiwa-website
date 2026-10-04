@@ -18,11 +18,11 @@ const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', ye
       {placeholder && <span class="tag-sample">Sample</span>}
     </div>
     <div class="mcard__text" data-reveal="up">
-    <div class="mcard__meta">
-      {series && <span>{series}</span>}
-      <time datetime={date.toISOString()}>{fmt.format(date)}</time>
-    </div>
-    <h3 class="mcard__title">{title}</h3>
+      <div class="mcard__meta">
+        {series && <span>{series}</span>}
+        <time datetime={date.toISOString()}>{fmt.format(date)}</time>
+      </div>
+      <h3 class="mcard__title">{title}</h3>
     </div>
   </a>
 </article>
@@ -50,10 +50,12 @@ const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', ye
   .mcard__meta {
     display: flex;
     gap: 1rem;
+    font-family: var(--ff-ui);
     font-size: var(--fs-eyebrow);
-    letter-spacing: 0.16em;
+    font-weight: 700;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: var(--c-accent);
+    color: var(--c-accent-text);
     margin-bottom: 0.6rem;
   }
   .mcard__title {

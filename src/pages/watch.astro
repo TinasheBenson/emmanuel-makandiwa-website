@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import YouTube from '../components/YouTube.astro';
+import Icon from '../components/Icon.astro';
 import { site } from '../data/site';
 
 const videos = (await getCollection('messages'))
@@ -11,12 +12,11 @@ const videos = (await getCollection('messages'))
 const [latest] = videos;
 ---
 
-<Base title="Watch & Listen" description="Watch sermons on YouTube and listen to the Emmanuel Makandiwa podcast.">
+<Base title="Watch and listen" description="Watch sermons on YouTube and listen to the Emmanuel Makandiwa podcast on Spotify.">
   <PageHero
-    eyebrow="Watch & Listen"
-    title="The word,"
-    accent="wherever you are"
-    lead="Nothing streams until you press play, so you stay in control of your data. Wi-Fi recommended for video."
+    eyebrow="Watch and listen"
+    title="Sermons and podcast"
+    lead="Nothing plays or downloads until you press play. If you can, use Wi-Fi for video."
   />
 
   {
@@ -31,7 +31,7 @@ const [latest] = videos;
             <div data-reveal="up">
               <h2 class="section-title">{latest.data.title}</h2>
               <p class="dim">{latest.data.summary}</p>
-              <a class="btn btn--ghost" href={`/messages/${latest.id}/`}>Read the notes</a>
+              <a class="btn btn--ghost" href={`/messages/${latest.id}/`}><span>Read the notes</span></a>
             </div>
           </div>
         </div>
@@ -43,21 +43,21 @@ const [latest] = videos;
     <div class="container platforms">
       <a class="platform" href={site.youtube.channelUrl} target="_blank" rel="noopener" data-reveal="up">
         <span class="eyebrow">YouTube</span>
-        <h3>Sermons & services</h3>
-        <p class="dim">Full messages, highlights and live services on the official channel.</p>
-        <span class="platform__cta">Subscribe →</span>
+        <h3>Sermons and services</h3>
+        <p class="dim">Full sermons and live services on the official channel.</p>
+        <span class="platform__cta">Subscribe <Icon name="arrowUpRight" /></span>
       </a>
       <a class="platform" href={site.podcast.url} target="_blank" rel="noopener" data-reveal="up">
         <span class="eyebrow">Podcast</span>
         <h3>Listen on Spotify</h3>
-        <p class="dim">Audio messages that use a fraction of the data of video. Perfect for the commute.</p>
-        <span class="platform__cta">Listen →</span>
+        <p class="dim">The same messages as audio, which uses much less data than video.</p>
+        <span class="platform__cta">Listen <Icon name="arrowUpRight" /></span>
       </a>
       <a class="platform" href="/messages/" data-reveal="up">
         <span class="eyebrow">Read</span>
         <h3>Message notes</h3>
-        <p class="dim">Written summaries of teachings, the lightest way to catch up.</p>
-        <span class="platform__cta">Browse →</span>
+        <p class="dim">Written summaries, for when you'd rather read.</p>
+        <span class="platform__cta">Read the notes <Icon name="arrowRight" /></span>
       </a>
     </div>
   </section>
@@ -99,7 +99,11 @@ const [latest] = videos;
   }
   .platform__cta {
     margin-top: auto;
-    font-weight: 600;
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+    font-family: var(--ff-ui);
+    font-weight: 700;
   }
   @media (max-width: 900px) {
     .watch-latest__grid,

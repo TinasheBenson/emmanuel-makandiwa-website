@@ -7,18 +7,17 @@ import { site } from '../data/site';
 // TODO: the ministry must supply its official giving channels (online giving
 // URL, mobile money and bank details). Never publish unverified account details.
 const ways = [
-  { title: 'Give online', copy: 'Secure card giving through the official UFIC channels.', cta: 'Give online', href: site.church.url, pending: false },
-  { title: 'Mobile money', copy: 'EcoCash and other mobile money options for partners in Zimbabwe.', cta: 'Details coming soon', href: undefined, pending: true },
-  { title: 'Bank transfer', copy: 'Local and international bank transfer details for partners worldwide.', cta: 'Details coming soon', href: undefined, pending: true },
+  { title: 'Online', copy: 'Card payments through the UFIC website.', cta: 'Give online', href: site.church.url, pending: false },
+  { title: 'Mobile money', copy: 'For givers in Zimbabwe, including EcoCash.', cta: 'Details coming soon', href: undefined, pending: true },
+  { title: 'Bank transfer', copy: 'Account details for local and international transfers.', cta: 'Details coming soon', href: undefined, pending: true },
 ];
 ---
 
-<Base title="Give" description="Partner with the ministry of Prophet Emmanuel Makandiwa.">
+<Base title="Give" description="Ways to give to the ministry of Prophet Emmanuel Makandiwa.">
   <PageHero
     eyebrow="Give"
-    title="Partner with"
-    accent="the vision"
-    lead="Your giving carries the message further: into stadiums, homes and nations. Thank you for sowing into lives being transformed."
+    title="Give"
+    lead="Thank you for supporting the ministry. Choose the way that works best for you."
   />
 
   <section class="section give">
@@ -30,7 +29,7 @@ const ways = [
               <h2>{w.title}</h2>
               <p class="dim">{w.copy}</p>
               {w.href ? (
-                <a class="btn" href={w.href} target="_blank" rel="noopener" data-magnetic>{w.cta}</a>
+                <a class="btn" href={w.href} target="_blank" rel="noopener">{w.cta}</a>
               ) : (
                 <span class="way__pending">{w.cta}</span>
               )}
@@ -45,10 +44,10 @@ const ways = [
   <section class="section section--light">
     <div class="container give__verse">
       <p data-scrub-words>
-        “Give, and it will be given to you. A good measure, pressed down, shaken together and running over, will be poured into
-        your lap.”
+        Give, and it shall be given unto you; good measure, pressed down, and shaken together, and running over, shall men give
+        into your bosom.
       </p>
-      <span class="eyebrow">Luke 6:38</span>
+      <span class="eyebrow">Luke 6:38 (KJV)</span>
     </div>
   </section>
 </Base>
@@ -95,16 +94,16 @@ const ways = [
     color: var(--c-text-dim);
   }
   .give :global(.give__emblem) {
-    color: var(--c-accent);
-    max-width: 360px;
+    color: var(--c-accent-text);
+    max-width: 280px;
   }
   .give__verse {
     max-width: 1000px;
   }
   .give__verse p {
-    font-family: var(--ff-display);
-    font-size: clamp(1.8rem, 3.6vw, 3.2rem);
-    line-height: 1.2;
+    font-style: italic;
+    font-size: clamp(1.7rem, 3.4vw, 3rem);
+    line-height: 1.22;
   }
   @media (max-width: 900px) {
     .give__grid {

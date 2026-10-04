@@ -12,7 +12,8 @@ The new emmanuelmakandiwa.com: a static [Astro](https://astro.build) site with c
 | Smooth scroll | Lenis (desktop "full" tier only) |
 | Video | HyperFrames compositions rendered to small MP4/WebM loops (`video/`) |
 | Content | Markdown content collections in `src/content/` |
-| Fonts | Self-hosted via Fontsource |
+| Fonts | Archivo (Omnibus-Type) + Source Serif 4 (Adobe), self-hosted from the foundries' GitHub repos |
+| Icons | Phosphor (MIT) |
 
 ## Getting started
 
@@ -59,11 +60,15 @@ Entries with `placeholder: true` are design samples and show a "Sample" tag. **D
 
 ## Brand
 
-`src/styles/tokens.css` holds every colour, type and motion token. The current values are **placeholders** until the existing site's logo, colours and fonts are audited. Swap them there and the whole site follows.
+`src/styles/tokens.css` holds every colour, type and motion token. The colours are provisional until the ministry confirms its palette and logo. Swap them there and the whole site follows.
+
+## Assets and credits
+
+No machine-generated images, fonts or icons are used. Photographs, typefaces and icons come from openly licensed sources published in open-source repositories, listed with their licences in [CREDITS.md](CREDITS.md) (also rendered at `/credits/`). [AUDIT.md](AUDIT.md) records what was replaced and why. The photographs are atmosphere only; photos of Emmanuel and Ruth Makandiwa and of UFIC events must come from the ministry.
 
 ## Background films
 
-`video/film-template.html` is a [HyperFrames](https://github.com/heygen-com/hyperframes) composition: slow push-ins across photographs, light-leak sweeps on every cut and a seeded gold-dust field, built as a seamless loop. `video/render.mjs` stamps out one composition per film (image lists at the top of the file), renders it, and encodes 1280×720 WebM/MP4 loops (~200 KB / ~600 KB) into `public/video/`.
+`video/film-template.html` is a [HyperFrames](https://github.com/heygen-com/hyperframes) composition: slow push-ins and dissolves across the photographs, with nothing synthetic layered on top, built as a seamless loop. `video/render.mjs` stamps out one composition per film (image lists at the top of the file), renders it, and encodes 1280×720 WebM/MP4 loops (~850 KB / ~1.1 MB) into `public/video/`.
 
 ```sh
 npm run video:render            # all films

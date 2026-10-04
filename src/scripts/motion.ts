@@ -260,7 +260,6 @@ function svgMorphs() {
       },
     });
     rest.forEach((shape) => tl.to(target, { morphSVG: shape, ease: 'power1.inOut', duration: 1 }));
-    tl.to(svg, { rotate: 90, transformOrigin: '50% 50%', ease: 'none', duration: rest.length }, 0);
   });
 }
 
@@ -301,31 +300,6 @@ function marquees() {
         gsap.to(loop, { timeScale: 1 + Math.abs(v), duration: 0.3, overwrite: true });
         gsap.to(loop, { timeScale: 1, duration: 1.2, delay: 0.3, overwrite: false });
       },
-    });
-  });
-}
-
-/* -------------------------------------------------------------- magnetic */
-
-function magnetic() {
-  if (!finePointer()) return;
-  document.querySelectorAll<HTMLElement>('[data-magnetic]').forEach((el) => {
-    const xTo = gsap.quickTo(el, 'x', { duration: 0.6, ease: 'elastic.out(1, 0.4)' });
-    const yTo = gsap.quickTo(el, 'y', { duration: 0.6, ease: 'elastic.out(1, 0.4)' });
-    const move = (e: PointerEvent) => {
-      const r = el.getBoundingClientRect();
-      xTo((e.clientX - (r.left + r.width / 2)) * 0.3);
-      yTo((e.clientY - (r.top + r.height / 2)) * 0.3);
-    };
-    const leave = () => {
-      xTo(0);
-      yTo(0);
-    };
-    el.addEventListener('pointermove', move);
-    el.addEventListener('pointerleave', leave);
-    cleanups.push(() => {
-      el.removeEventListener('pointermove', move);
-      el.removeEventListener('pointerleave', leave);
     });
   });
 }
@@ -411,7 +385,6 @@ function init() {
     svgMorphs();
     counters();
     marquees();
-    magnetic();
     videos();
   });
   // Fonts and lazy images change layout; recalc trigger positions once settled.

@@ -1,0 +1,76 @@
+---
+/**
+ * A book's cover if the ministry has supplied one; otherwise a plain title
+ * card set in the site's type (deliberately not a fake cover).
+ */
+import { Image } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  book: CollectionEntry<'books'>;
+  sizes?: string;
+}
+const { book, sizes = '240px' } = Astro.props;
+const { title, cover } = book.data;
+const [series, edition] = title.split(':').map((s) => s.trim());
+---
+
+<div class="bookcard" transition:name={`book-cover-${book.id}`}>
+  {
+    cover ? (
+      <Image src={cover} alt={`Cover of ${title}`} widths={[300, 500, 700]} sizes={sizes} />
+    ) : (
+      <div class="bookcard__plain" role="img" aria-label={title}>
+        <span class="bookcard__series">{series}</span>
+        {edition && <span class="bookcard__edition">{edition}</span>}
+        <span class="bookcard__authors">{book.data.authors}</span>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .bookcard {
+    aspect-ratio: 2 / 3;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--c-paper);
+    color: var(--c-text-ink);
+    box-shadow: 0 24px 50px -24px rgb(0 0 0 / 0.6);
+  }
+  .bookcard :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .bookcard__plain {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 12% 10%;
+    border-top: 10px solid var(--c-accent);
+  }
+  .bookcard__series {
+    font-family: var(--ff-display);
+    font-weight: 800;
+    font-stretch: 65%;
+    text-transform: uppercase;
+    font-size: clamp(1.5rem, 2.4vw, 2.2rem);
+    line-height: 0.9;
+  }
+  .bookcard__edition {
+    margin-top: 0.6rem;
+    font-family: var(--ff-text);
+    font-style: italic;
+    font-size: 1rem;
+  }
+  .bookcard__authors {
+    margin-top: auto;
+    font-family: var(--ff-ui);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--c-text-ink-dim);
+  }
+</style>

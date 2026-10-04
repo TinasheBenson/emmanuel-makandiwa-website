@@ -1,33 +1,35 @@
 /*
  * Brand tokens.
- * PLACEHOLDER VALUES — to be replaced with the colours, logo and type audited
- * from the current emmanuelmakandiwa.com once it is reachable. Everything in
- * the site reads from these variables, so swapping them re-skins the whole build.
+ * Colours are provisional until the ministry confirms its brand palette; type
+ * is Archivo + Source Serif 4 (see CREDITS.md). Everything in the site reads
+ * from these variables, so swapping them re-skins the whole build.
  */
 :root {
-  /* Colour */
-  --c-ink: #0d1220;          /* primary dark surface */
-  --c-ink-2: #161d31;        /* raised dark surface */
-  --c-paper: #f6f1e7;        /* primary light surface */
-  --c-paper-2: #ece4d4;      /* raised light surface */
-  --c-accent: #c8a15a;       /* brand accent (gold) */
-  --c-accent-2: #e3c88f;     /* accent highlight */
-  --c-text: #f3efe6;         /* text on dark */
-  --c-text-dim: #b9b3a6;
-  --c-text-ink: #17140f;     /* text on light */
-  --c-text-ink-dim: #5d564a;
-  --c-line: rgb(255 255 255 / 0.12);
-  --c-line-ink: rgb(23 20 15 / 0.14);
+  /* Colour: ink, paper and the red of red-letter Bible print */
+  --c-ink: #141210;          /* primary dark surface */
+  --c-ink-2: #1f1c19;        /* raised dark surface */
+  --c-paper: #f2ede3;        /* primary light surface */
+  --c-paper-2: #e6ddcd;      /* raised light surface */
+  --c-accent: #a8221b;       /* buttons, accents on paper */
+  --c-accent-deep: #861a14;  /* hover */
+  --c-accent-text: #f0705f;  /* accent text on dark (AA contrast) */
+  --c-text: #f2ede3;         /* text on dark */
+  --c-text-dim: #b4ab9d;
+  --c-text-ink: #141210;     /* text on light */
+  --c-text-ink-dim: #5a5248;
+  --c-line: rgb(242 237 227 / 0.14);
+  --c-line-ink: rgb(20 18 16 / 0.16);
 
   /* Type */
-  --ff-display: 'Cormorant Garamond', Georgia, serif;
-  --ff-sans: 'Inter Variable', system-ui, sans-serif;
-  --fs-mega: clamp(3.4rem, 11vw, 11rem);
-  --fs-h1: clamp(2.6rem, 6.4vw, 6rem);
-  --fs-h2: clamp(2rem, 4.4vw, 4rem);
+  --ff-display: 'Archivo', 'Arial Narrow', sans-serif;
+  --ff-ui: 'Archivo', system-ui, sans-serif;
+  --ff-text: 'Source Serif 4', Georgia, serif;
+  --fs-mega: clamp(3.6rem, 13vw, 13rem);
+  --fs-h1: clamp(2.8rem, 7.5vw, 7.25rem);
+  --fs-h2: clamp(2.2rem, 5.2vw, 4.75rem);
   --fs-h3: clamp(1.35rem, 2.2vw, 1.9rem);
   --fs-lead: clamp(1.1rem, 1.6vw, 1.4rem);
-  --fs-body: 1.0625rem;
+  --fs-body: 1.125rem;
   --fs-small: 0.875rem;
   --fs-eyebrow: 0.75rem;
 
@@ -35,8 +37,8 @@
   --gutter: clamp(1rem, 4vw, 3rem);
   --section: clamp(5rem, 12vw, 11rem);
   --max: 1360px;
-  --radius: 4px;
-  --radius-lg: 14px;
+  --radius: 2px;
+  --radius-lg: 3px;
   --header-h: 72px;
 
   /* Motion */

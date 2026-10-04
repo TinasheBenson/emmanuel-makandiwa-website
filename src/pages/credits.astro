@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { Content } from '../../CREDITS.md';
+---
+
+<Base title="Credits" description="Sources and licences for the photographs, typefaces and icons used on this site.">
+  <PageHero eyebrow="Credits" title="Photo and font credits" />
+  <section class="section section--light">
+    <div class="container credits">
+      <Content />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .credits {
+    max-width: 1100px;
+  }
+  .credits :global(h1) {
+    display: none;
+  }
+  .credits :global(h2) {
+    font-size: var(--fs-h3);
+    margin: 3rem 0 1rem;
+  }
+  .credits :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    display: block;
+    overflow-x: auto;
+  }
+  .credits :global(th),
+  .credits :global(td) {
+    text-align: left;
+    vertical-align: top;
+    padding: 0.6rem 0.8rem 0.6rem 0;
+    border-bottom: 1px solid var(--c-line-ink);
+  }
+  .credits :global(th) {
+    font-family: var(--ff-ui);
+    font-size: var(--fs-eyebrow);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .credits :global(a) {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .credits :global(code) {
+    font-size: 0.85em;
+  }
+</style>

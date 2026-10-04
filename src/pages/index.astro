@@ -4,16 +4,14 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Film from '../components/Film.astro';
 import MessageCard from '../components/MessageCard.astro';
+import BookCard from '../components/BookCard.astro';
 import Emblem from '../components/Emblem.astro';
-import { site } from '../data/site';
+import Icon from '../components/Icon.astro';
 
-import hero from '../assets/media/hero.jpg';
-import portrait from '../assets/media/portrait.jpg';
-import stage from '../assets/media/stage.jpg';
-import crowd from '../assets/media/crowd.jpg';
-import worship from '../assets/media/worship.jpg';
-import conference from '../assets/media/conference.jpg';
-import outreach from '../assets/media/outreach.jpg';
+import earthAtNight from '../assets/media/earth-at-night.jpg';
+import oilLamp from '../assets/media/oil-lamp.jpg';
+import bibleLights from '../assets/media/bible-lights.jpg';
+import { stories } from '../data/gatherings';
 
 const messages = (await getCollection('messages')).sort((a, b) => {
   if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
@@ -28,71 +26,60 @@ const events = (await getCollection('events'))
   .slice(0, 3);
 const dateFmt = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short' });
 
-// TODO: confirm each line against the current site's "Transforming Lives" copy.
-const stories = [
-  { title: 'Seminars', copy: 'Teaching that renews the mind and equips believers for everyday life.', image: stage },
-  { title: 'Conferences', copy: 'Gatherings where nations meet to hear the word and encounter God together.', image: conference },
-  { title: 'Masterclasses', copy: 'Focused sessions with Emmanuel and Ruth Makandiwa on purpose, family and growth.', image: worship },
-  { title: 'Crusades', copy: 'Stadium nights of worship, prophecy and prayer that draw multitudes.', image: crowd },
-  { title: 'Outreach', copy: 'Love in action, reaching communities with compassion and practical help.', image: outreach },
-];
+// John 3:16, King James Version (public domain).
+const verse =
+  'For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life. John 3:16';
 ---
 
 <Base>
-  <!-- 1 · Hero: full-bleed film that pulls back into a card as you scroll -->
+  <!-- Hero: full-bleed film that pulls back into a framed picture as you scroll -->
   <section class="hero" data-hero-morph>
     <div class="hero__media" data-hero-media>
-      <Film poster={hero} webm="/video/hero.webm" mp4="/video/hero.mp4" label="Highlights from the ministry of Emmanuel Makandiwa" class="hero__film" />
+      <Film poster={earthAtNight} webm="/video/hero.webm" mp4="/video/hero.mp4" label="Slow film of night skies, a valley and a pier at sunset" class="hero__film" />
     </div>
     <div class="hero__content container" data-hero-content>
-      <p class="eyebrow" data-reveal="fade">Prophet Emmanuel Makandiwa</p>
-      <h1 class="hero__title" data-split="hero">Inspiring People.<br /><span class="italic">Sharing Life.</span></h1>
+      <p class="eyebrow" data-reveal="fade">Emmanuel Makandiwa</p>
+      <h1 class="hero__title" data-split="hero">Inspiring People.<br />Sharing Life.</h1>
       <div class="hero__actions" data-reveal="up">
-        <a href={`/messages/${featured.id}/`} class="btn" data-magnetic>
-          Watch the latest message
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
-        </a>
-        <a href="/about/" class="btn btn--ghost">Discover his story</a>
+        <a href={`/messages/${featured.id}/`} class="btn">Latest message <Icon name="arrowRight" /></a>
+        <a href="/about/" class="btn btn--ghost"><span>About him</span></a>
       </div>
     </div>
-    <div class="hero__scroll" aria-hidden="true"><span></span>Scroll</div>
   </section>
 
-  <!-- 2 · Statement + portrait (portrait morphs into the About hero) -->
-  <section class="section intro">
+  <!-- Intro: the picture carries over into the About page header -->
+  <section class="section section--light intro">
     <div class="container intro__grid">
       <div>
-        <p class="eyebrow">The man & the mission</p>
+        <p class="eyebrow">About</p>
         <p class="intro__statement" data-scrub-words>
-          Emmanuel Makandiwa is the founding President of {site.church.name}. Together with his wife Ruth, he has spent his life
-          helping people discover the God who transforms minds, families and nations.
+          Emmanuel Makandiwa founded United Family International Church in Harare in 2010. He leads it with his wife, Ruth, and
+          together they write Life Lighter, a devotional that comes out every month.
         </p>
-        <a href="/about/" class="btn btn--ghost" data-reveal="up">Read the full story</a>
+        <a href="/about/" class="btn btn--ghost" data-reveal="up"><span>Read his story</span></a>
       </div>
-      <a href="/about/" class="intro__portrait frame" transition:name="portrait" aria-label="About Emmanuel Makandiwa">
-        <Image src={portrait} alt="Portrait of Emmanuel Makandiwa" widths={[500, 800, 1100]} sizes="(max-width: 900px) 100vw, 40vw" data-parallax="0.08" />
+      <a href="/about/" class="intro__image frame" transition:name="about-image" aria-label="About Emmanuel Makandiwa">
+        <Image src={oilLamp} alt="A clay oil lamp resting on an open Bible" widths={[500, 800, 1100]} sizes="(max-width: 900px) 100vw, 40vw" data-parallax="0.08" />
       </a>
     </div>
   </section>
 
-  <!-- 3 · Marquee -->
-  <div class="ribbon" data-marquee="30" aria-hidden="true">
-    <div class="ribbon__track" data-marquee-track>
-      {[0, 1].map(() => (
-        <span>Faith <i>✦</i> Hope <i>✦</i> Love <i>✦</i> Purpose <i>✦</i> Family <i>✦</i> Nations <i>✦</i>&nbsp;</span>
-      ))}
+  <!-- Scripture ribbon -->
+  <div class="ribbon" data-marquee="60" role="img" aria-label={verse}>
+    <div class="ribbon__track" data-marquee-track aria-hidden="true">
+      <span>{verse}</span><span>{verse}</span>
     </div>
   </div>
 
-  <!-- 4 · Messages -->
+  <!-- Messages -->
   <section class="section">
     <div class="container">
       <div class="section-head">
         <div>
           <p class="eyebrow">Messages</p>
-          <h2 class="section-title" data-split>A word in<br /><span class="italic">due season</span></h2>
+          <h2 class="section-title" data-split>Latest messages</h2>
         </div>
-        <a href="/messages/" class="btn btn--ghost" data-reveal="up">All messages</a>
+        <a href="/messages/" class="btn btn--ghost" data-reveal="up"><span>All messages</span></a>
       </div>
       <div class="messages-grid">
         <div class="messages-grid__featured"><MessageCard entry={featured} size="large" /></div>
@@ -101,20 +88,20 @@ const stories = [
     </div>
   </section>
 
-  <!-- 5 · Transforming lives: pinned horizontal journey -->
+  <!-- Gatherings: pinned horizontal track -->
   <section class="stories" data-hscroll>
     <div class="stories__track" data-hscroll-track>
       <div class="stories__intro">
-        <p class="eyebrow">Transforming lives</p>
-        <h2 class="section-title" data-split>Gatherings that<br /><span class="italic">change everything</span></h2>
-        <p class="dim" data-reveal="up">Over the years, Emmanuel and Ruth Makandiwa have hosted seminars, conferences and masterclasses that have inspired millions.</p>
-        <a href="/transforming-lives/" class="btn btn--ghost" data-reveal="up">Explore the impact</a>
+        <p class="eyebrow">Transforming Lives</p>
+        <h2 class="section-title" data-split>Where people gather</h2>
+        <p class="dim" data-reveal="up">Emmanuel and Ruth Makandiwa have hosted seminars, conferences and masterclasses for years.</p>
+        <a href="/transforming-lives/" class="btn btn--ghost" data-reveal="up"><span>See them all</span></a>
       </div>
       {
         stories.map((s, i) => (
           <article class="story">
             <div class="story__media frame">
-              <Image src={s.image} alt="" widths={[500, 900]} sizes="(max-width: 900px) 90vw, 32vw" data-hscroll-media />
+              <Image src={s.image} alt={s.alt} widths={[500, 900]} sizes="(max-width: 900px) 90vw, 32vw" data-hscroll-media />
             </div>
             <span class="story__num">{String(i + 1).padStart(2, '0')}</span>
             <h3>{s.title}</h3>
@@ -125,33 +112,35 @@ const stories = [
     </div>
   </section>
 
-  <!-- 6 · Numbers + morphing emblem -->
+  <!-- Numbers + morphing emblem -->
   <section class="section section--light numbers">
     <div class="container numbers__grid">
       <Emblem class="numbers__emblem" />
       <div class="numbers__stats">
-        <!-- TODO: confirm figures with the ministry before launch -->
-        <div data-reveal="up"><strong data-counter="2010" data-plain>2010</strong><span class="dim">United Family International Church founded in Harare</span></div>
-        <div data-reveal="up"><strong data-counter="6">6</strong><span class="dim">Nations with UFIC branches across Africa, Europe and Australia</span></div>
-        <div data-reveal="up"><strong data-counter="30">30</strong><span class="dim">Days of devotion in every monthly edition of Life Lighter</span></div>
+        <div data-reveal="up"><strong data-counter="2010" data-plain>2010</strong><span class="dim">United Family International Church is founded in Harare.</span></div>
+        <div data-reveal="up"><strong data-counter="6">6</strong><span class="dim">Countries with UFIC branches: Zimbabwe, Botswana, South Africa, the United Kingdom, Australia and Zambia.</span></div>
+        <div data-reveal="up"><strong data-counter="30">30</strong><span class="dim">Daily readings in each monthly edition of Life Lighter.</span></div>
       </div>
     </div>
   </section>
 
-  <!-- 7 · Books -->
+  <!-- Books -->
   <section class="section books-teaser">
     <div class="container books-teaser__grid">
       <div>
-        <p class="eyebrow">Books & devotionals</p>
-        <h2 class="section-title" data-split>Life <span class="italic">Lighter</span></h2>
-        <p class="lead dim" data-reveal="up">A 30-day devotional with a message, scripture, declaration and prayer for every day, released monthly in English and Shona.</p>
-        <a href="/books/" class="btn" data-reveal="up" data-magnetic>Browse the library</a>
+        <p class="eyebrow">Books</p>
+        <h2 class="section-title" data-split>Life Lighter</h2>
+        <p class="lead dim" data-reveal="up">
+          A reading for every day of the month: a short message, a Bible passage, a declaration and a prayer. Published monthly, in
+          English and Shona.
+        </p>
+        <a href="/books/" class="btn" data-reveal="up">See the editions <Icon name="arrowRight" /></a>
       </div>
       <div class="books-fan">
         {
           books.map((b, i) => (
-            <a href="/books/" class="books-fan__item" style={`--i:${i}`} transition:name={`book-cover-${b.id}`} aria-label={b.data.title}>
-              <Image src={b.data.cover} alt="" widths={[300, 500]} sizes="220px" />
+            <a href="/books/" class="books-fan__item" style={`--i:${i}`} aria-label={b.data.title}>
+              <BookCard book={b} sizes="220px" />
             </a>
           ))
         }
@@ -159,21 +148,21 @@ const stories = [
     </div>
   </section>
 
-  <!-- 8 · Watch & listen + events -->
+  <!-- Watch & listen + events -->
   <section class="section section--light">
     <div class="container split">
-      <div class="watch-card grain" data-reveal="up">
-        <Image src={stage} alt="" widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 50vw" class="watch-card__bg" />
+      <div class="watch-card" data-reveal="up">
+        <Image src={bibleLights} alt="" widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 50vw" class="watch-card__bg" />
         <div class="watch-card__body">
-          <p class="eyebrow">Watch & listen</p>
-          <h2 class="section-title">Wherever<br /><span class="italic">you are.</span></h2>
-          <p>Sermons on YouTube and the Emmanuel Makandiwa podcast on Spotify. Stream on Wi-Fi or download for later.</p>
-          <a href="/watch/" class="btn">Open the hub</a>
+          <p class="eyebrow">Watch and listen</p>
+          <h2 class="section-title">Sermons and podcast</h2>
+          <p>Sermons are on YouTube. The podcast is on Spotify, and listening uses far less data than watching.</p>
+          <a href="/watch/" class="btn">Watch and listen <Icon name="arrowRight" /></a>
         </div>
       </div>
       <div>
-        <p class="eyebrow">Upcoming</p>
-        <h2 class="section-title" data-split>Events</h2>
+        <p class="eyebrow">Events</p>
+        <h2 class="section-title" data-split>Coming up</h2>
         <ul class="event-list">
           {
             events.map((e) => (
@@ -189,16 +178,19 @@ const stories = [
             ))
           }
         </ul>
-        <a href="/events/" class="btn btn--ghost" data-reveal="up">All events</a>
+        <a href="/events/" class="btn btn--ghost" data-reveal="up"><span>All events</span></a>
       </div>
     </div>
   </section>
 
-  <!-- 9 · Give -->
-  <section class="give-band grain">
+  <!-- Give -->
+  <section class="give-band">
     <div class="container give-band__inner">
-      <h2 data-split>Partner with<br /><span class="italic">the vision.</span></h2>
-      <a href="/give/" class="btn" data-magnetic>Give today</a>
+      <div>
+        <h2 data-split>Give</h2>
+        <p data-reveal="up">Your gifts keep the work of the ministry going.</p>
+      </div>
+      <a href="/give/" class="btn btn--light">Ways to give <Icon name="arrowRight" /></a>
     </div>
   </section>
 </Base>
@@ -214,7 +206,7 @@ const stories = [
   .hero__media {
     position: absolute;
     inset: 0;
-    clip-path: inset(0 0 0 0 round 0px);
+    clip-path: inset(0 0 0 0);
     will-change: clip-path, transform;
   }
   .hero__media :global(.hero__film) {
@@ -228,44 +220,17 @@ const stories = [
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    padding-bottom: clamp(5rem, 12vh, 9rem);
+    padding-bottom: clamp(4rem, 10vh, 8rem);
   }
   .hero__title {
-    font-size: var(--fs-mega);
-    line-height: 0.92;
-    margin-bottom: 2.5rem;
+    font-size: clamp(3rem, 10.5vw, 11.5rem);
+    line-height: 0.86;
+    margin-bottom: 2.25rem;
   }
   .hero__actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
-  }
-  .hero__scroll {
-    position: absolute;
-    z-index: 2;
-    left: 50%;
-    bottom: 1.5rem;
-    transform: translateX(-50%);
-    display: grid;
-    justify-items: center;
-    gap: 0.5rem;
-    font-size: 0.7rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    opacity: 0.7;
-  }
-  .hero__scroll span {
-    width: 1px;
-    height: 40px;
-    background: linear-gradient(var(--c-accent), transparent);
-    animation: scrollcue 2s var(--ease-in-out) infinite;
-    transform-origin: top;
-  }
-  @keyframes scrollcue {
-    0% { transform: scaleY(0); }
-    50% { transform: scaleY(1); transform-origin: top; }
-    51% { transform-origin: bottom; }
-    100% { transform: scaleY(0); transform-origin: bottom; }
+    gap: 0.75rem;
   }
 
   /* Intro */
@@ -276,16 +241,16 @@ const stories = [
     align-items: center;
   }
   .intro__statement {
-    font-family: var(--ff-display);
-    font-size: clamp(1.7rem, 3.4vw, 3.1rem);
-    line-height: 1.2;
+    font-size: clamp(1.6rem, 3vw, 2.6rem);
+    line-height: 1.25;
+    font-weight: 500;
     margin-bottom: 2.5rem;
   }
-  .intro__portrait {
+  .intro__image {
     display: block;
     aspect-ratio: 4 / 5;
   }
-  .intro__portrait :global(img) {
+  .intro__image :global(img) {
     width: 100%;
     height: 116%;
     object-fit: cover;
@@ -295,21 +260,26 @@ const stories = [
   .ribbon {
     overflow: hidden;
     white-space: nowrap;
-    padding-block: 1.6rem;
-    border-block: 1px solid var(--c-line);
+    padding-block: 1.4rem;
+    background: var(--c-accent);
+    color: #fff;
   }
   .ribbon__track {
     display: inline-flex;
-    font-family: var(--ff-display);
-    font-size: clamp(2rem, 5vw, 4rem);
+    font-family: var(--ff-text);
     font-style: italic;
+    font-size: clamp(1.3rem, 2.6vw, 2rem);
   }
-  .ribbon__track i {
-    font-style: normal;
-    color: var(--c-accent);
-    font-size: 0.5em;
-    vertical-align: middle;
-    margin-inline: 0.6em;
+  .ribbon__track span {
+    padding-right: 3em;
+  }
+  /* No marquee when animation is off: let the verse wrap instead. */
+  :global(html[data-motion='reduced']) .ribbon {
+    white-space: normal;
+    padding-inline: var(--gutter);
+  }
+  :global(html[data-motion='reduced']) .ribbon__track span + span {
+    display: none;
   }
 
   .messages-grid {
@@ -354,9 +324,11 @@ const stories = [
     object-fit: cover;
   }
   .story__num {
+    font-family: var(--ff-ui);
     font-size: var(--fs-eyebrow);
-    color: var(--c-accent);
-    letter-spacing: 0.2em;
+    font-weight: 700;
+    color: var(--c-accent-text);
+    letter-spacing: 0.1em;
   }
   .story h3 {
     font-size: var(--fs-h3);
@@ -390,13 +362,13 @@ const stories = [
   /* Numbers */
   .numbers__grid {
     display: grid;
-    grid-template-columns: 0.8fr 1.2fr;
+    grid-template-columns: 0.6fr 1.4fr;
     gap: clamp(2rem, 6vw, 6rem);
     align-items: center;
   }
   .numbers :global(.numbers__emblem) {
     width: 100%;
-    max-width: 380px;
+    max-width: 300px;
     color: var(--c-accent);
   }
   .numbers__stats {
@@ -405,7 +377,7 @@ const stories = [
   }
   .numbers__stats div {
     display: grid;
-    grid-template-columns: 11rem 1fr;
+    grid-template-columns: 12rem 1fr;
     align-items: baseline;
     gap: 1.5rem;
     padding-bottom: 2rem;
@@ -413,9 +385,10 @@ const stories = [
   }
   .numbers__stats strong {
     font-family: var(--ff-display);
-    font-size: clamp(3rem, 6vw, 5.5rem);
-    line-height: 1;
-    font-weight: 600;
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    font-weight: 800;
+    font-stretch: 70%;
+    line-height: 0.9;
   }
 
   /* Books */
@@ -434,23 +407,14 @@ const stories = [
     left: 50%;
     top: 50%;
     width: clamp(150px, 16vw, 220px);
-    aspect-ratio: 2 / 3;
-    border-radius: 6px;
-    overflow: hidden;
-    box-shadow: 0 30px 60px rgb(0 0 0 / 0.45);
-    transform: translate(-50%, -50%) translateX(calc((var(--i) - 1) * 62%)) rotate(calc((var(--i) - 1) * 9deg));
+    transform: translate(-50%, -50%) translateX(calc((var(--i) - 1) * 86%)) rotate(calc((var(--i) - 1) * 4deg));
     transition: transform 0.8s var(--ease-out);
   }
   .books-fan__item:nth-child(2) {
     z-index: 2;
   }
   .books-fan:hover .books-fan__item {
-    transform: translate(-50%, -50%) translateX(calc((var(--i) - 1) * 85%)) rotate(calc((var(--i) - 1) * 4deg)) translateY(-8px);
-  }
-  .books-fan__item :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    transform: translate(-50%, -50%) translateX(calc((var(--i) - 1) * 104%)) rotate(0deg) translateY(-8px);
   }
 
   /* Watch + events */
@@ -481,7 +445,7 @@ const stories = [
     position: absolute;
     inset: 0;
     z-index: 1;
-    background: linear-gradient(transparent 20%, rgb(13 18 32 / 0.9));
+    background: linear-gradient(transparent 15%, rgb(20 18 16 / 0.92));
   }
   .watch-card__body {
     position: relative;
@@ -489,7 +453,7 @@ const stories = [
     padding: clamp(1.5rem, 4vw, 3rem);
   }
   .watch-card .eyebrow {
-    color: var(--c-accent);
+    color: var(--c-accent-text);
   }
   .event-list {
     list-style: none;
@@ -509,8 +473,11 @@ const stories = [
   }
   .event-list time {
     font-family: var(--ff-display);
-    font-size: 1.6rem;
-    color: color-mix(in oklab, var(--c-accent) 70%, black);
+    font-size: 1.7rem;
+    font-weight: 800;
+    font-stretch: 72%;
+    text-transform: uppercase;
+    color: var(--c-accent);
   }
   .event-list strong {
     display: block;
@@ -519,22 +486,32 @@ const stories = [
 
   /* Give band */
   .give-band {
-    position: relative;
-    overflow: hidden;
-    padding-block: clamp(5rem, 10vw, 9rem);
-    background:
-      radial-gradient(60% 120% at 20% 50%, color-mix(in oklab, var(--c-accent) 35%, transparent), transparent 70%),
-      var(--c-ink);
+    padding-block: clamp(4rem, 8vw, 7rem);
+    background: var(--c-accent);
+    color: #fff;
   }
   .give-band__inner {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-end;
     gap: 2rem;
   }
   .give-band h2 {
-    font-size: var(--fs-h1);
+    font-size: var(--fs-mega);
+    line-height: 0.85;
+    margin-bottom: 1rem;
+  }
+  .give-band p {
+    margin: 0;
+    font-size: var(--fs-lead);
+  }
+  .btn--light {
+    background: var(--c-paper);
+    color: var(--c-text-ink);
+  }
+  .btn--light:hover {
+    background: #fff;
   }
 
   @media (max-width: 900px) {
@@ -548,10 +525,6 @@ const stories = [
     .numbers__stats div {
       grid-template-columns: 1fr;
       gap: 0.5rem;
-    }
-    .section-head {
-      flex-direction: column;
-      align-items: flex-start;
     }
   }
 </style>

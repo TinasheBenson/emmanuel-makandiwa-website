@@ -3,46 +3,52 @@ import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import { site } from '../data/site';
-import portrait from '../assets/media/portrait.jpg';
-import couple from '../assets/media/couple.jpg';
-import stage from '../assets/media/stage.jpg';
-import crowd from '../assets/media/crowd.jpg';
+import oilLamp from '../assets/media/oil-lamp.jpg';
+import valley from '../assets/media/valley.jpg';
+import earthAtNight from '../assets/media/earth-at-night.jpg';
+import pierSunset from '../assets/media/pier-sunset.jpg';
 
 // TODO: replace with the biography from the current /about/ and
-// /who-is-emmanuel-makandiwa/ pages, and confirm milestones with the ministry.
+// /who-is-emmanuel-makandiwa/ pages. Photos are placeholders (CREDITS.md);
+// the portrait slots need real photographs from the ministry.
 const chapters = [
   {
-    kicker: 'Calling',
-    title: 'A life given to the word',
-    body: 'From a young age Emmanuel Makandiwa sensed a call to ministry. Years of study, prayer and pastoral service shaped a teacher whose messages are marked by revelation and practical faith.',
-    image: stage,
+    kicker: 'Ministry',
+    title: 'Called to preach',
+    body: 'He was a pastor for several years before he started UFIC. Preaching and teaching are still most of what he does, at the church in Harare and on television and YouTube.',
+    image: valley,
+    alt: 'A valley at golden hour',
   },
   {
-    kicker: 'Founding',
+    kicker: 'The church',
     title: 'United Family International Church',
-    body: 'In 2010 he founded United Family International Church in Harare, Zimbabwe. It has grown into one of the largest ministries in the region, with branches across Africa, Europe and Australia.',
-    image: crowd,
+    body: 'He founded UFIC in Harare in 2010. It now has branches in Zimbabwe, Botswana, South Africa, the United Kingdom, Australia and Zambia.',
+    image: earthAtNight,
+    alt: 'City lights seen from orbit at night',
   },
 ];
+
+// Romans 12:2, King James Version (public domain).
+const verse =
+  'And be not conformed to this world: but be ye transformed by the renewing of your mind, that ye may prove what is that good, and acceptable, and perfect, will of God.';
 ---
 
-<Base title="About" description="The story of Prophet Emmanuel Makandiwa, founding President of United Family International Church.">
+<Base title="About" description="Emmanuel Makandiwa founded United Family International Church in Harare in 2010 and leads it with his wife, Ruth.">
   <PageHero
     eyebrow="About"
-    title="Who is"
-    accent="Emmanuel Makandiwa?"
-    lead={`Founding President of ${site.church.name}, teacher, author and husband to Ruth Makandiwa: a man whose message has inspired millions to renew their minds and live with purpose.`}
-    image={portrait}
-    imageAlt="Portrait of Emmanuel Makandiwa"
-    transitionName="portrait"
+    title="Who is Emmanuel Makandiwa?"
+    lead={`He founded ${site.church.name} in Harare in 2010 and leads it with his wife, Ruth. He preaches, teaches and writes.`}
+    image={oilLamp}
+    imageAlt="A clay oil lamp resting on an open Bible"
+    transitionName="about-image"
   />
 
-  <section class="section">
+  <section class="section section--light">
     <div class="container narrow">
-      <p class="about__statement" data-scrub-words>
-        His ministry rests on a simple conviction: when people encounter the truth of God's word, their thinking changes, and
-        when their thinking changes, their whole life follows.
-      </p>
+      <blockquote class="about__verse">
+        <p data-scrub-words>{verse}</p>
+        <cite class="eyebrow">Romans 12:2</cite>
+      </blockquote>
     </div>
   </section>
 
@@ -51,7 +57,7 @@ const chapters = [
       <section class:list={['section chapter', { 'chapter--flip': i % 2 }]}>
         <div class="container chapter__grid">
           <div class="chapter__media" data-reveal="clip">
-            <Image src={c.image} alt="" widths={[600, 1000, 1400]} sizes="(max-width: 900px) 100vw, 50vw" />
+            <Image src={c.image} alt={c.alt} widths={[600, 1000, 1400]} sizes="(max-width: 900px) 100vw, 50vw" />
           </div>
           <div>
             <p class="eyebrow">{c.kicker}</p>
@@ -67,15 +73,15 @@ const chapters = [
     <div class="container chapter__grid">
       <div>
         <p class="eyebrow">Family</p>
-        <h2 class="section-title" data-split>Emmanuel &<br /><span class="italic">Ruth Makandiwa</span></h2>
+        <h2 class="section-title" data-split>Emmanuel and Ruth Makandiwa</h2>
         <p class="lead dim" data-reveal="up">
-          Together they lead the ministry, host seminars, conferences and masterclasses, and write the monthly Life Lighter
-          devotional. Ruth Makandiwa also leads the Victorious Ladies meetings, empowering women across the nations.
+          They lead the church together and write Life Lighter together. Ruth Makandiwa also runs Victorious Ladies, a ministry
+          for women that holds a camp meeting every year.
         </p>
-        <a class="btn" href={site.ruth.url} target="_blank" rel="noopener" data-reveal="up">Visit Ruth Makandiwa</a>
+        <a class="btn" href={site.ruth.url} target="_blank" rel="noopener" data-reveal="up">Ruth Makandiwa's website</a>
       </div>
       <div class="chapter__media chapter__media--tall" data-reveal="clip">
-        <Image src={couple} alt="Emmanuel and Ruth Makandiwa" widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 45vw" />
+        <Image src={pierSunset} alt="A wooden pier at sunset" widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 45vw" />
       </div>
     </div>
   </section>
@@ -85,11 +91,17 @@ const chapters = [
   .narrow {
     max-width: 1100px;
   }
-  .about__statement {
-    font-family: var(--ff-display);
-    font-size: clamp(1.8rem, 3.6vw, 3.3rem);
-    line-height: 1.2;
+  .about__verse {
     margin: 0;
+  }
+  .about__verse p {
+    font-size: clamp(1.7rem, 3.4vw, 3rem);
+    font-style: italic;
+    line-height: 1.22;
+    margin-bottom: 1.5rem;
+  }
+  .about__verse cite {
+    font-style: normal;
   }
   .chapter__grid {
     display: grid;

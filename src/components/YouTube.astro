@@ -1,4 +1,5 @@
 ---
+import Icon from './Icon.astro';
 /**
  * Click-to-load YouTube facade. Nothing from YouTube downloads until the
  * visitor taps play, which matters on expensive mobile data.
@@ -15,7 +16,7 @@ const { id, title, transitionName } = Astro.props;
 <div class="yt frame" data-yt={id} transition:name={transitionName}>
   <img src={`https://i.ytimg.com/vi/${id}/hqdefault.jpg`} alt="" loading="lazy" decoding="async" width="480" height="360" />
   <button class="yt__play" type="button" aria-label={`Play: ${title}`}>
-    <svg viewBox="0 0 68 48" aria-hidden="true"><path d="M66.5 7.7A8.5 8.5 0 0 0 60.5 1.7C55.2.3 34 .3 34 .3s-21.2 0-26.5 1.4a8.5 8.5 0 0 0-6 6C.1 13 .1 24 .1 24s0 11 1.4 16.3a8.5 8.5 0 0 0 6 6C12.8 47.7 34 47.7 34 47.7s21.2 0 26.5-1.4a8.5 8.5 0 0 0 6-6C67.9 35 67.9 24 67.9 24s0-11-1.4-16.3z" fill="var(--c-accent)" /><path d="M27 34.3 44.6 24 27 13.7z" fill="var(--c-ink)" /></svg>
+    <span class="yt__icon"><Icon name="play" /></span>
   </button>
 </div>
 
@@ -62,12 +63,22 @@ const { id, title, transitionName } = Astro.props;
   .yt__play:hover {
     background: rgb(0 0 0 / 0.1);
   }
-  .yt__play svg {
-    width: 72px;
+  .yt__icon {
+    display: grid;
+    place-items: center;
+    width: 4.5rem;
+    height: 4.5rem;
+    border-radius: var(--radius);
+    background: var(--c-accent);
+    color: #fff;
     transition: transform var(--dur-fast) var(--ease-out);
   }
-  .yt__play:hover svg {
-    transform: scale(1.1);
+  .yt__icon :global(svg) {
+    width: 1.6rem;
+    height: 1.6rem;
+  }
+  .yt__play:hover .yt__icon {
+    transform: scale(1.06);
   }
   .yt :global(iframe) {
     position: absolute;

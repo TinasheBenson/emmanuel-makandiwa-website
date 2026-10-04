@@ -1,0 +1,28 @@
+---
+/**
+ * Phosphor icons (MIT, github.com/phosphor-icons/core), inlined at build time.
+ * Add an icon by importing its SVG below and listing it in `icons`.
+ */
+import arrowRight from '@phosphor-icons/core/assets/bold/arrow-right-bold.svg?raw';
+import arrowUp from '@phosphor-icons/core/assets/bold/arrow-up-bold.svg?raw';
+import arrowUpRight from '@phosphor-icons/core/assets/bold/arrow-up-right-bold.svg?raw';
+import play from '@phosphor-icons/core/assets/fill/play-fill.svg?raw';
+import youtube from '@phosphor-icons/core/assets/fill/youtube-logo-fill.svg?raw';
+import spotify from '@phosphor-icons/core/assets/fill/spotify-logo-fill.svg?raw';
+import envelope from '@phosphor-icons/core/assets/regular/envelope-simple.svg?raw';
+
+const icons = { arrowRight, arrowUp, arrowUpRight, play, youtube, spotify, envelope } as const;
+
+interface Props {
+  name: keyof typeof icons;
+  class?: string;
+  label?: string;
+}
+const { name, class: cls, label } = Astro.props;
+const svg = icons[name].replace(
+  '<svg ',
+  `<svg class="icon ${cls ?? ''}" ${label ? `role="img" aria-label="${label}"` : 'aria-hidden="true"'} `,
+);
+---
+
+<Fragment set:html={svg} />

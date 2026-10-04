@@ -30,7 +30,7 @@ const all = [...nav, ...navSecondary];
     </nav>
 
     <div class="header__actions">
-      <a href="/give/" class="btn header__give" data-magnetic>Give</a>
+      <a href="/give/" class="btn header__give">Give</a>
       <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-menu" data-menu-toggle>
         <span class="visually-hidden">Menu</span>
         <span class="menu-btn__bars" aria-hidden="true"><i></i><i></i></span>
@@ -145,20 +145,23 @@ const all = [...nav, ...navSecondary];
   .brand__mark {
     display: grid;
     place-items: center;
-    width: 2.6rem;
-    height: 2.6rem;
-    border: 1px solid currentColor;
-    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--c-accent);
+    color: #fff;
+    border-radius: var(--radius);
     font-family: var(--ff-display);
-    font-size: 1.05rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
+    font-size: 1rem;
+    font-weight: 800;
+    font-stretch: 75%;
   }
   .brand__name {
     font-family: var(--ff-display);
-    font-size: 1.3rem;
-    font-weight: 600;
+    font-size: 1.15rem;
+    font-weight: 800;
+    font-stretch: 75%;
     letter-spacing: 0.01em;
+    text-transform: uppercase;
   }
 
   .nav ul {
@@ -170,8 +173,10 @@ const all = [...nav, ...navSecondary];
   }
   .nav a {
     position: relative;
-    font-size: 0.875rem;
-    font-weight: 500;
+    font-family: var(--ff-ui);
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-stretch: 92%;
     letter-spacing: 0.02em;
     opacity: 0.8;
     transition: opacity var(--dur-fast);
@@ -186,8 +191,7 @@ const all = [...nav, ...navSecondary];
     right: 0;
     bottom: -8px;
     height: 2px;
-    border-radius: 2px;
-    background: var(--c-accent);
+    background: var(--c-accent-text);
   }
 
   .header__actions {
@@ -203,8 +207,8 @@ const all = [...nav, ...navSecondary];
     display: none;
     width: 2.75rem;
     height: 2.75rem;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 1px currentColor;
+    border-radius: var(--radius);
+    box-shadow: inset 0 0 0 1.5px currentColor;
     place-items: center;
   }
   .menu-btn__bars {
@@ -282,16 +286,19 @@ const all = [...nav, ...navSecondary];
     padding: 0.35rem 0;
     font-family: var(--ff-display);
     font-size: clamp(2.2rem, 8vw, 4.5rem);
-    line-height: 1.1;
+    font-weight: 800;
+    font-stretch: 72%;
+    text-transform: uppercase;
+    line-height: 1.05;
     border-bottom: 1px solid var(--c-line);
   }
   .menu__list a[aria-current='page'] {
-    color: var(--c-accent);
+    color: var(--c-accent-text);
   }
   .menu__num {
-    font-family: var(--ff-sans);
+    font-family: var(--ff-ui);
     font-size: 0.8rem;
-    color: var(--c-accent);
+    color: var(--c-accent-text);
     letter-spacing: 0.1em;
   }
   .menu__foot {
@@ -300,6 +307,7 @@ const all = [...nav, ...navSecondary];
     justify-content: space-between;
     gap: 1rem;
     margin-top: 3rem;
+    font-family: var(--ff-ui);
     font-size: 0.9rem;
   }
   .menu__socials {

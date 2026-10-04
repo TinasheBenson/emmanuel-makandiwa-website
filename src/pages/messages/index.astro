@@ -8,12 +8,11 @@ const messages = (await getCollection('messages')).sort((a, b) => b.data.date.va
 const series = [...new Set(messages.map((m) => m.data.series).filter(Boolean))] as string[];
 ---
 
-<Base title="Sermons & Messages" description="Sermons and teachings by Prophet Emmanuel Makandiwa.">
+<Base title="Messages" description="Sermons by Prophet Emmanuel Makandiwa, with recordings and notes.">
   <PageHero
-    eyebrow="Sermons & Messages"
-    title="Teachings that"
-    accent="transform lives"
-    lead="Summaries and recordings of messages delivered at United Family International Church and beyond."
+    eyebrow="Sermons"
+    title="Messages"
+    lead="Recordings and notes from sermons at United Family International Church."
   />
 
   <section class="section messages">
@@ -81,8 +80,10 @@ const series = [...new Set(messages.map((m) => m.data.series).filter(Boolean))] 
   }
   .filter {
     padding: 0.55rem 1.1rem;
-    border-radius: 999px;
-    box-shadow: inset 0 0 0 1px var(--c-line);
+    box-shadow: inset 0 0 0 1.5px var(--c-line);
+    border-radius: var(--radius);
+    font-family: var(--ff-ui);
+    font-weight: 600;
     font-size: 0.85rem;
     transition:
       background var(--dur-fast),
@@ -91,7 +92,7 @@ const series = [...new Set(messages.map((m) => m.data.series).filter(Boolean))] 
   .filter.is-active,
   .filter:hover {
     background: var(--c-accent);
-    color: var(--c-ink);
+    color: #fff;
     box-shadow: none;
   }
   .grid {

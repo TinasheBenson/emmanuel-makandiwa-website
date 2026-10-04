@@ -28,8 +28,9 @@ const books = defineCollection({
     z.object({
       title: z.string(),
       subtitle: z.string().optional(),
-      authors: z.string().default('Emmanuel & Ruth Makandiwa'),
-      cover: image(),
+      authors: z.string().default('Emmanuel and Ruth Makandiwa'),
+      /** Real cover scan from the ministry. Without one, a plain title card is shown. */
+      cover: image().optional(),
       order: z.number().default(0),
       links: z.array(z.object({ label: z.string(), href: z.url() })).default([]),
       placeholder: z.boolean().default(false),

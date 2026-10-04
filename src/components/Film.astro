@@ -7,6 +7,7 @@
  * - reduced: static poster
  */
 import { getImage } from 'astro:assets';
+import Icon from './Icon.astro';
 import type { ImageMetadata } from 'astro';
 
 interface Props {
@@ -50,7 +51,7 @@ const hasVideo = Boolean(webm || mp4);
     hasVideo && showPlay && (
       <button class="film__play" type="button" data-play-film>
         <span class="film__play-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+          <Icon name="play" />
         </span>
         Play film
       </button>
@@ -95,8 +96,7 @@ const hasVideo = Boolean(webm || mp4);
     position: absolute;
     inset: 0;
     background:
-      linear-gradient(180deg, rgb(13 18 32 / 0.55) 0%, rgb(13 18 32 / 0.1) 35%, rgb(13 18 32 / 0.85) 100%),
-      radial-gradient(120% 80% at 70% 30%, transparent 30%, rgb(13 18 32 / 0.5));
+      linear-gradient(180deg, rgb(20 18 16 / 0.55) 0%, rgb(20 18 16 / 0.1) 35%, rgb(20 18 16 / 0.88) 100%);
   }
   .film__play {
     position: absolute;
@@ -106,9 +106,10 @@ const hasVideo = Boolean(webm || mp4);
     display: none;
     align-items: center;
     gap: 0.75rem;
+    font-family: var(--ff-ui);
     font-size: 0.8rem;
-    font-weight: 600;
-    letter-spacing: 0.14em;
+    font-weight: 700;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
   .film__play-icon {
@@ -116,12 +117,13 @@ const hasVideo = Boolean(webm || mp4);
     place-items: center;
     width: 3rem;
     height: 3rem;
-    border-radius: 50%;
-    border: 1px solid currentColor;
+    border-radius: var(--radius);
+    background: var(--c-accent);
+    color: #fff;
   }
-  .film__play-icon svg {
-    width: 1rem;
-    margin-left: 2px;
+  .film__play-icon :global(svg) {
+    width: 1.1rem;
+    height: 1.1rem;
   }
   :global(html[data-motion='lite']) .film__play,
   :global(html[data-motion='reduced']) .film__play {

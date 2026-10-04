@@ -4,8 +4,8 @@ import PageHero from '../components/PageHero.astro';
 import { site } from '../data/site';
 ---
 
-<Base title="Contact & Support" description="Get in touch with the ministry of Prophet Emmanuel Makandiwa.">
-  <PageHero eyebrow="Contact & Support" title="We'd love to" accent="hear from you" lead="Questions, prayer requests, testimonies or media enquiries: write to us and the team will respond." />
+<Base title="Contact and support" description="Email the ministry of Prophet Emmanuel Makandiwa with questions, prayer requests and testimonies.">
+  <PageHero eyebrow="Contact and support" title="Get in touch" lead="Write to us with questions, prayer requests, testimonies or media enquiries." />
 
   <section class="section contact">
     <div class="container contact__grid">
@@ -43,7 +43,7 @@ import { site } from '../data/site';
           <span>Message</span>
           <textarea name="message" rows="6" required></textarea>
         </label>
-        <button class="btn" type="submit" data-magnetic>Compose email</button>
+        <button class="btn" type="submit">Compose email</button>
       </form>
     </div>
   </section>
@@ -76,6 +76,8 @@ import { site } from '../data/site';
   .contact__email {
     display: inline-block;
     font-family: var(--ff-display);
+    font-weight: 700;
+    font-stretch: 85%;
     font-size: clamp(1.4rem, 2.6vw, 2.2rem);
     margin-bottom: 2.5rem;
     word-break: break-word;
@@ -103,6 +105,7 @@ import { site } from '../data/site';
   .form label {
     display: grid;
     gap: 0.5rem;
+    font-family: var(--ff-ui);
     font-size: var(--fs-small);
     color: var(--c-text-dim);
   }

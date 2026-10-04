@@ -7,7 +7,7 @@ export const site = {
   title: 'Prophet Emmanuel Makandiwa',
   tagline: 'Inspiring People. Sharing Life.',
   description:
-    'The official website of Prophet Emmanuel Makandiwa, founder of United Family International Church: messages, teachings, books, events and ways to connect.',
+    'Sermons, books and events from Prophet Emmanuel Makandiwa, founder of United Family International Church in Harare.',
   email: 'info@emmanuelmakandiwa.com',
   church: { name: 'United Family International Church', short: 'UFIC', url: 'https://www.ufiministries.org/' },
   ruth: { name: 'Ruth Makandiwa', url: 'https://ruthmakandiwa.org/' },
@@ -27,7 +27,7 @@ export const site = {
 export const nav = [
   { label: 'About', href: '/about/' },
   { label: 'Messages', href: '/messages/' },
-  { label: 'Watch & Listen', href: '/watch/' },
+  { label: 'Watch and listen', href: '/watch/' },
   { label: 'Books', href: '/books/' },
   { label: 'Transforming Lives', href: '/transforming-lives/' },
   { label: 'Events', href: '/events/' },
@@ -35,5 +35,5 @@ export const nav = [
 
 export const navSecondary = [
   { label: 'Give', href: '/give/' },
-  { label: 'Contact & Support', href: '/contact-and-support/' },
+  { label: 'Contact', href: '/contact-and-support/' },
 ];

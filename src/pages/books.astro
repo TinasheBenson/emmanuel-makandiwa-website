@@ -1,19 +1,19 @@
 ---
-import { Image } from 'astro:assets';
 import { getCollection, render } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
+import BookCard from '../components/BookCard.astro';
+import Icon from '../components/Icon.astro';
 
 const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
 const rendered = await Promise.all(books.map(async (b) => ({ book: b, Content: (await render(b)).Content })));
 ---
 
-<Base title="Books & Life Lighter" description="Books and the Life Lighter monthly devotional by Emmanuel and Ruth Makandiwa.">
+<Base title="Life Lighter" description="Life Lighter, the monthly devotional by Emmanuel and Ruth Makandiwa, with links to each edition.">
   <PageHero
-    eyebrow="Books & devotionals"
-    title="Life"
-    accent="Lighter"
-    lead="A 30-day devotional by Emmanuel and Ruth Makandiwa, released monthly in English and Shona, with a message, scripture, declaration and prayer for every day."
+    eyebrow="Books"
+    title="Life Lighter"
+    lead="A reading for every day of the month by Emmanuel and Ruth Makandiwa: a short message, a Bible passage, a declaration and a prayer. Published monthly, in English and Shona."
   />
 
   <section class="section library">
@@ -21,9 +21,8 @@ const rendered = await Promise.all(books.map(async (b) => ({ book: b, Content: (
       {
         rendered.map(({ book, Content }) => (
           <article class="book">
-            <div class="book__cover" transition:name={`book-cover-${book.id}`}>
-              <Image src={book.data.cover} alt={`Cover of ${book.data.title}`} widths={[300, 500, 700]} sizes="(max-width: 700px) 70vw, 22vw" />
-              <span class="book__spine" aria-hidden="true" />
+            <div class="book__cover">
+              <BookCard book={book} sizes="(max-width: 700px) 70vw, 22vw" />
             </div>
             <div class="book__info" data-reveal="up">
               <h2>{book.data.title}</h2>
@@ -32,7 +31,7 @@ const rendered = await Promise.all(books.map(async (b) => ({ book: b, Content: (
               <div class="dim book__desc"><Content /></div>
               <div class="book__links">
                 {book.data.links.map((l) => (
-                  <a class="btn btn--ghost" href={l.href} target="_blank" rel="noopener">{l.label}</a>
+                  <a class="btn btn--ghost" href={l.href} target="_blank" rel="noopener"><span>{l.label}</span> <Icon name="arrowUpRight" /></a>
                 ))}
               </div>
             </div>
@@ -45,7 +44,7 @@ const rendered = await Promise.all(books.map(async (b) => ({ book: b, Content: (
 
 <style>
   .library {
-    padding-top: 0;
+    padding-top: clamp(3rem, 6vw, 5rem);
   }
   .library__grid {
     display: grid;
@@ -59,48 +58,30 @@ const rendered = await Promise.all(books.map(async (b) => ({ book: b, Content: (
     align-items: start;
   }
   .book__cover {
-    position: relative;
-    aspect-ratio: 2 / 3;
-    border-radius: 4px 8px 8px 4px;
-    overflow: hidden;
-    box-shadow:
-      0 30px 60px -20px rgb(0 0 0 / 0.6),
-      0 0 0 1px rgb(255 255 255 / 0.06);
-    transform: perspective(900px) rotateY(-14deg);
+    transform: perspective(900px) rotateY(-10deg);
     transform-origin: left center;
     transition: transform 0.9s var(--ease-out);
   }
   .book:hover .book__cover {
     transform: perspective(900px) rotateY(0deg) translateY(-6px);
   }
-  .book__cover :global(img) {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-  .book__spine {
-    position: absolute;
-    inset: 0 auto 0 0;
-    width: 10%;
-    background: linear-gradient(90deg, rgb(0 0 0 / 0.35), rgb(255 255 255 / 0.08) 60%, transparent);
-  }
   .book h2 {
     font-size: var(--fs-h3);
+    font-stretch: 80%;
     margin-bottom: 0.4rem;
   }
   .book__sub {
-    font-family: var(--ff-display);
     font-style: italic;
-    color: var(--c-accent);
-    font-size: 1.15rem;
+    font-size: 1.1rem;
     margin-bottom: 0.4rem;
   }
   .book__authors {
+    font-family: var(--ff-ui);
     font-size: var(--fs-small);
     margin-bottom: 1rem;
   }
   .book__desc {
-    font-size: 0.95rem;
+    font-size: 1rem;
   }
   .book__links {
     display: flex;
@@ -117,7 +98,7 @@ const rendered = await Promise.all(books.map(async (b) => ({ book: b, Content: (
       grid-template-columns: 1fr;
     }
     .book__cover {
-      max-width: 240px;
+      max-width: 220px;
     }
   }
 </style>

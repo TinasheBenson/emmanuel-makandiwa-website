@@ -6,7 +6,7 @@ import { mkdir } from 'node:fs/promises';
 
 const BASE = process.env.BASE_URL || 'http://localhost:4321';
 const OUT = process.argv[2] || 'screenshots';
-const routes = ['/', '/about/', '/messages/', '/messages/the-ministry-of-giving-iii/', '/watch/', '/books/', '/transforming-lives/', '/events/', '/give/', '/contact-and-support/', '/404'];
+const routes = ['/', '/about/', '/messages/', '/messages/the-ministry-of-giving-iii/', '/watch/', '/books/', '/transforming-lives/', '/events/', '/give/', '/contact-and-support/', '/credits/', '/404'];
 const devices = [
   { name: 'desktop', viewport: { width: 1440, height: 900 }, isMobile: false },
   { name: 'mobile', viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true },
@@ -56,7 +56,7 @@ await page.screenshot({ path: `${OUT}/full-home-hero.png` });
 await page.mouse.wheel(0, 1400);
 await page.waitForTimeout(1500);
 await page.screenshot({ path: `${OUT}/full-home-scrolled.png` });
-await page.click('a.intro__portrait');
+await page.click('a.intro__image');
 await page.waitForURL('**/about/');
 await page.waitForTimeout(2000);
 await page.screenshot({ path: `${OUT}/full-about-after-nav.png` });

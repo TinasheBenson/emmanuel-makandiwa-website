@@ -1,11 +1,32 @@
-/* Self-hosted fonts (placeholders until the brand typography is audited). */
-@import '@fontsource-variable/inter/index.css';
-@import '@fontsource/cormorant-garamond/500.css';
-@import '@fontsource/cormorant-garamond/600.css';
-@import '@fontsource/cormorant-garamond/700.css';
-@import '@fontsource/cormorant-garamond/500-italic.css';
-@import '@fontsource/cormorant-garamond/600-italic.css';
 @import './tokens.css';
+
+/*
+ * Typefaces, self-hosted from the foundries' open-source repositories
+ * (see CREDITS.md): Archivo by Omnibus-Type, Source Serif 4 by Adobe.
+ */
+@font-face {
+  font-family: 'Archivo';
+  src: url('/fonts/archivo-var.woff2') format('woff2-variations'), url('/fonts/archivo-var.woff2') format('woff2');
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Source Serif 4';
+  src: url('/fonts/source-serif-4-var.woff2') format('woff2-variations'), url('/fonts/source-serif-4-var.woff2') format('woff2');
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Source Serif 4';
+  src: url('/fonts/source-serif-4-var-italic.woff2') format('woff2-variations'), url('/fonts/source-serif-4-var-italic.woff2') format('woff2');
+  font-weight: 200 900;
+  font-style: italic;
+  font-display: swap;
+}
+
 
 *,
 *::before,
@@ -34,9 +55,10 @@ html.lenis body {
 
 body {
   margin: 0;
-  font-family: var(--ff-sans);
+  font-family: var(--ff-text);
   font-size: var(--fs-body);
-  line-height: 1.65;
+  line-height: 1.6;
+  font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow-x: clip;
@@ -72,11 +94,23 @@ h2,
 h3,
 h4 {
   font-family: var(--ff-display);
-  font-weight: 600;
-  line-height: 1.02;
-  letter-spacing: -0.01em;
   margin: 0;
   text-wrap: balance;
+}
+/* Big headings: condensed, heavy, upper case, set tight like a poster. */
+h1,
+h2 {
+  font-weight: 800;
+  font-stretch: 72%;
+  line-height: 0.92;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+}
+h3,
+h4 {
+  font-weight: 700;
+  font-stretch: 92%;
+  line-height: 1.15;
 }
 
 p {
@@ -86,7 +120,7 @@ p {
 
 ::selection {
   background: var(--c-accent);
-  color: var(--c-ink);
+  color: #fff;
 }
 
 :focus-visible {
@@ -113,28 +147,21 @@ p {
   --c-line: var(--c-line-ink);
 }
 .section--light .eyebrow {
-  color: color-mix(in oklab, var(--c-accent) 70%, black);
+  color: var(--c-accent);
 }
 .section--light .dim {
   color: var(--c-text-ink-dim);
 }
 
 .eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75em;
+  display: block;
+  font-family: var(--ff-ui);
   font-size: var(--fs-eyebrow);
-  font-weight: 600;
-  letter-spacing: 0.22em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--c-accent);
-  margin-bottom: 1.5rem;
-}
-.eyebrow::before {
-  content: '';
-  width: 2.25rem;
-  height: 1px;
-  background: currentColor;
+  color: var(--c-accent-text);
+  margin-bottom: 1.25rem;
 }
 
 .lead {
@@ -144,11 +171,6 @@ p {
 
 .dim {
   color: var(--c-text-dim);
-}
-
-.italic {
-  font-style: italic;
-  color: var(--c-accent);
 }
 
 .visually-hidden {
@@ -167,7 +189,7 @@ p {
   z-index: 200;
   padding: 0.6rem 1rem;
   background: var(--c-accent);
-  color: var(--c-ink);
+  color: #fff;
   border-radius: var(--radius);
   transform: translateY(-200%);
 }
@@ -197,47 +219,41 @@ p {
 
 /* ---------- Buttons ---------- */
 .btn {
-  --btn-bg: var(--c-accent);
-  --btn-fg: var(--c-ink);
-  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.7rem;
-  padding: 1rem 1.6rem;
-  border-radius: 999px;
-  background: var(--btn-bg);
-  color: var(--btn-fg);
-  font-size: 0.9rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  overflow: hidden;
-  isolation: isolate;
-  transition: color var(--dur-fast) var(--ease-out);
+  gap: 0.6rem;
+  padding: 0.95rem 1.4rem;
+  border-radius: var(--radius);
+  background: var(--c-accent);
+  color: #fff;
+  font-family: var(--ff-ui);
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-stretch: 90%;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
-.btn::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  background: var(--c-text);
-  transform: translateY(101%);
-  border-radius: inherit;
-  transition: transform var(--dur) var(--ease-out);
-}
-.btn:hover::after {
-  transform: none;
+.btn:hover {
+  background: var(--c-accent-deep);
 }
 .btn--ghost {
-  --btn-bg: transparent;
-  --btn-fg: currentColor;
-  box-shadow: inset 0 0 0 1px currentColor;
+  background: transparent;
+  color: currentColor;
+  box-shadow: inset 0 0 0 1.5px currentColor;
 }
 .btn--ghost:hover {
+  background: currentColor;
+}
+.btn--ghost:hover > * {
   color: var(--c-ink);
 }
+.section--light .btn--ghost:hover > * {
+  color: var(--c-paper);
+}
 .btn svg {
-  width: 1em;
-  height: 1em;
+  width: 1.1em;
+  height: 1.1em;
   transition: transform var(--dur-fast) var(--ease-out);
 }
 .btn:hover svg {
@@ -273,34 +289,14 @@ p {
   top: 0.9rem;
   left: 0.9rem;
   padding: 0.25rem 0.6rem;
-  border-radius: 999px;
+  border-radius: var(--radius);
   background: var(--c-paper);
   color: var(--c-text-ink);
+  font-family: var(--ff-ui);
   font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-}
-
-/* ---------- Grain overlay (cheap, CSS-only) ---------- */
-.grain::after {
-  content: '';
-  position: absolute;
-  inset: -50%;
-  pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
-  opacity: 0.07;
-  mix-blend-mode: overlay;
-}
-html[data-motion='full'] .grain::after {
-  animation: grain 1.2s steps(6) infinite;
-}
-@keyframes grain {
-  0%, 100% { transform: translate(0, 0); }
-  20% { transform: translate(-3%, 2%); }
-  40% { transform: translate(2%, -3%); }
-  60% { transform: translate(-2%, -1%); }
-  80% { transform: translate(3%, 3%); }
 }
 
 /* ---------- Reveal defaults (pre-JS state only when motion is on) ---------- */

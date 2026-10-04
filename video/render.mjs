@@ -18,8 +18,8 @@ const PUBLIC = join(ROOT, 'public/video');
 
 /** Edit the image lists here when the real photography arrives. */
 const films = {
-  hero: { duration: 12, shots: ['hero.jpg', 'stage.jpg', 'crowd.jpg', 'worship.jpg'] },
-  transforming: { duration: 12, shots: ['conference.jpg', 'crowd.jpg', 'outreach.jpg', 'stage.jpg'] },
+  hero: { duration: 12, shots: ['earth-at-night.jpg', 'star-trails.jpg', 'valley.jpg', 'pier-sunset.jpg'] },
+  transforming: { duration: 12, shots: ['bible-lights.jpg', 'footprints.jpg', 'lake-reflection.jpg', 'dunes-night.jpg'] },
 };
 
 const only = process.argv.slice(2);
@@ -47,10 +47,10 @@ for (const [id, film] of Object.entries(films)) {
   const master = join(dir, 'master.mp4');
   run('npx', ['hyperframes', 'render', '--output', master, '--fps', '30', '--quality', 'high'], { cwd: dir });
 
-  // Web encodes: 1280x720, no audio, tuned for small size (~1 MB per 12 s).
+  // Web encodes: 1280x720, no audio, tuned for size (~0.8-1 MB per 12 s of photography).
   const scale = 'scale=1280:-2:flags=lanczos';
-  run('ffmpeg', ['-y', '-loglevel', 'error', '-i', master, '-vf', scale, '-an', '-c:v', 'libx264', '-preset', 'slow', '-crf', '27', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', join(PUBLIC, `${id}.mp4`)]);
-  run('ffmpeg', ['-y', '-loglevel', 'error', '-i', master, '-vf', scale, '-an', '-c:v', 'libvpx-vp9', '-b:v', '0', '-crf', '38', '-row-mt', '1', '-deadline', 'good', '-cpu-used', '2', join(PUBLIC, `${id}.webm`)]);
+  run('ffmpeg', ['-y', '-loglevel', 'error', '-i', master, '-vf', scale, '-an', '-c:v', 'libx264', '-preset', 'slow', '-crf', '29', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', join(PUBLIC, `${id}.mp4`)]);
+  run('ffmpeg', ['-y', '-loglevel', 'error', '-i', master, '-vf', scale, '-an', '-c:v', 'libvpx-vp9', '-b:v', '0', '-crf', '42', '-row-mt', '1', '-deadline', 'good', '-cpu-used', '2', join(PUBLIC, `${id}.webm`)]);
 
   for (const ext of ['mp4', 'webm']) {
     const { size } = await stat(join(PUBLIC, `${id}.${ext}`));

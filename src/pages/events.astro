@@ -13,11 +13,11 @@ const time = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digi
 ---
 
 <Base title="Events" description="Upcoming crusades, conferences and gatherings with Prophet Emmanuel Makandiwa.">
-  <PageHero eyebrow="Events" title="Gather" accent="with us" lead="Crusades, conferences and special services. Times shown in Harare time (CAT)." />
+  <PageHero eyebrow="Events" title="Events" lead="Crusades, conferences and special services. Times are in Central Africa Time (Harare)." />
 
   <section class="section events">
     <div class="container">
-      {upcoming.length === 0 && <p class="lead dim">New dates will be announced soon. Follow us on social media for updates.</p>}
+      {upcoming.length === 0 && <p class="lead dim">No dates announced yet. New events are posted on Facebook and YouTube first.</p>}
       <ul class="ev-list">
         {
           upcoming.map((e) => (
@@ -30,7 +30,7 @@ const time = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digi
                 <h2>{e.data.title}</h2>
                 <p class="dim">{e.data.location} · {time.format(e.data.start)} CAT</p>
                 <p>{e.data.summary}</p>
-                {e.data.link && <a class="btn btn--ghost" href={e.data.link} target="_blank" rel="noopener">Details</a>}
+                {e.data.link && <a class="btn btn--ghost" href={e.data.link} target="_blank" rel="noopener"><span>Details</span></a>}
               </div>
               {e.data.image && (
                 <div class="ev__media frame">
@@ -67,12 +67,16 @@ const time = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digi
     display: block;
     font-family: var(--ff-display);
     font-size: clamp(3.5rem, 6vw, 5rem);
+    font-weight: 800;
+    font-stretch: 68%;
     line-height: 1;
-    color: var(--c-accent);
+    color: var(--c-accent-text);
   }
   .ev__month {
+    font-family: var(--ff-ui);
+    font-weight: 700;
     font-size: var(--fs-eyebrow);
-    letter-spacing: 0.2em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
   }
   .ev h2 {
