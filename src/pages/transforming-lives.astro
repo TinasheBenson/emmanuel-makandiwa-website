@@ -1,0 +1,102 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Film from '../components/Film.astro';
+import conference from '../assets/media/conference.jpg';
+import stage from '../assets/media/stage.jpg';
+import worship from '../assets/media/worship.jpg';
+import crowd from '../assets/media/crowd.jpg';
+import outreach from '../assets/media/outreach.jpg';
+
+// TODO: replace with the copy and photography from the current /transforming-lives/ page.
+const pillars = [
+  { title: 'Seminars', copy: 'Practical teaching sessions that renew the mind and equip believers for work, family and leadership.', image: stage },
+  { title: 'Conferences', copy: 'International gatherings where thousands meet to hear the word, worship and receive prophetic direction.', image: conference },
+  { title: 'Masterclasses', copy: 'Focused sessions with Emmanuel and Ruth Makandiwa on purpose, relationships, finance and growth.', image: worship },
+  { title: 'Crusades', copy: 'Stadium nights such as Judgement Night: worship, prophecy and prayer that draw multitudes.', image: crowd },
+  { title: 'Outreach', copy: 'Compassion in action, reaching communities with practical help and the message of hope.', image: outreach },
+];
+---
+
+<Base title="Transforming Lives" description="Seminars, conferences and masterclasses hosted by Emmanuel and Ruth Makandiwa.">
+  <PageHero
+    eyebrow="Transforming Lives"
+    title="Minds renewed."
+    accent="Lives transformed."
+    lead="Emmanuel and Ruth Makandiwa have hosted seminars, conferences and masterclasses over the years, inspiring positive mental renewal that has transformed millions."
+  />
+
+  <section class="tl-film">
+    <Film poster={crowd} webm="/video/transforming.webm" mp4="/video/transforming.mp4" label="Highlights from ministry gatherings" class="tl-film__inner" />
+  </section>
+
+  <section class="section">
+    <div class="container">
+      {
+        pillars.map((p, i) => (
+          <article class:list={['pillar', { 'pillar--flip': i % 2 }]}>
+            <div class="pillar__media" data-reveal="clip">
+              <Image src={p.image} alt="" widths={[600, 1000, 1400]} sizes="(max-width: 900px) 100vw, 55vw" />
+            </div>
+            <div class="pillar__copy">
+              <span class="pillar__num" data-reveal="fade">{String(i + 1).padStart(2, '0')}</span>
+              <h2 class="section-title" data-split>{p.title}</h2>
+              <p class="lead dim" data-reveal="up">{p.copy}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .tl-film {
+    padding-inline: var(--gutter);
+  }
+  .tl-film :global(.tl-film__inner) {
+    height: min(80vh, 760px);
+    border-radius: var(--radius-lg);
+  }
+  .pillar {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+    margin-bottom: var(--section);
+  }
+  .pillar:last-child {
+    margin-bottom: 0;
+  }
+  .pillar--flip .pillar__media {
+    order: 2;
+  }
+  .pillar__media {
+    aspect-ratio: 16 / 11;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .pillar__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .pillar__num {
+    display: block;
+    font-family: var(--ff-display);
+    font-size: clamp(4rem, 9vw, 8rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--c-accent);
+    margin-bottom: 1rem;
+  }
+  @media (max-width: 900px) {
+    .pillar {
+      grid-template-columns: 1fr;
+    }
+    .pillar--flip .pillar__media {
+      order: 0;
+    }
+  }
+</style>

@@ -1,0 +1,116 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import YouTube from '../../components/YouTube.astro';
+import MessageCard from '../../components/MessageCard.astro';
+
+export async function getStaticPaths() {
+  const messages = await getCollection('messages');
+  return messages.map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+interface Props {
+  entry: CollectionEntry<'messages'>;
+}
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { title, date, series, summary, image, youtubeId, placeholder } = entry.data;
+const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const more = (await getCollection('messages'))
+  .filter((m) => m.id !== entry.id)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+---
+
+<Base title={title} description={summary}>
+  <article>
+    <header class="msg-hero">
+      <div class="msg-hero__media" transition:name={`message-media-${entry.id}`}>
+        <Image src={image} alt="" widths={[800, 1400, 2000]} sizes="100vw" loading="eager" fetchpriority="high" data-parallax="0.08" />
+        {placeholder && <span class="tag-sample">Sample</span>}
+      </div>
+      <div class="container msg-hero__copy">
+        <a href="/messages/" class="back link-underline" data-reveal="fade">← All messages</a>
+        <p class="eyebrow" data-reveal="fade">{series ?? 'Message'} · <time datetime={date.toISOString()}>{fmt.format(date)}</time></p>
+        <h1 class="msg-hero__title" data-split="hero">{title}</h1>
+      </div>
+    </header>
+
+    <section class="section">
+      <div class="container msg-body">
+        <p class="lead" data-reveal="up">{summary}</p>
+        {youtubeId && <div data-reveal="up"><YouTube id={youtubeId} title={title} /></div>}
+        <div class="prose" data-reveal="up"><Content /></div>
+      </div>
+    </section>
+  </article>
+
+  <section class="section section--light">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title" data-split>More messages</h2>
+        <a class="btn btn--ghost" href="/messages/">See all</a>
+      </div>
+      <div class="more">{more.map((m) => <MessageCard entry={m} />)}</div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .msg-hero {
+    position: relative;
+    min-height: 88svh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+  }
+  .msg-hero__media {
+    position: absolute;
+    inset: 0;
+  }
+  .msg-hero__media :global(img) {
+    width: 100%;
+    height: 116%;
+    object-fit: cover;
+  }
+  .msg-hero__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgb(13 18 32 / 0.35), rgb(13 18 32 / 0.92));
+  }
+  .msg-hero__copy {
+    position: relative;
+    z-index: 1;
+    padding-top: calc(var(--header-h) + 4rem);
+    padding-bottom: clamp(3rem, 7vw, 6rem);
+  }
+  .back {
+    display: inline-block;
+    margin-bottom: 2rem;
+    font-size: var(--fs-small);
+  }
+  .msg-hero__title {
+    font-size: var(--fs-h1);
+    max-width: 18ch;
+  }
+  .msg-body {
+    max-width: 860px;
+    display: grid;
+    gap: 2.5rem;
+  }
+  .prose {
+    font-size: 1.125rem;
+  }
+  .more {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+  @media (max-width: 900px) {
+    .more {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

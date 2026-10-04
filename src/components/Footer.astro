@@ -1,0 +1,181 @@
+---
+import { nav, navSecondary, site } from '../data/site';
+const year = new Date().getFullYear();
+---
+
+<footer class="footer grain">
+  <div class="container">
+    <div class="footer__cta">
+      <p class="eyebrow">Stay connected</p>
+      <h2 class="footer__title" data-split>
+        Receive a word<br /><span class="italic">for every season.</span>
+      </h2>
+      <div class="footer__cta-actions" data-reveal="up">
+        <a class="btn" href={site.youtube.channelUrl} target="_blank" rel="noopener" data-magnetic>
+          Subscribe on YouTube
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+        <a class="btn btn--ghost" href="/contact-and-support/">Contact & Support</a>
+      </div>
+    </div>
+
+    <div class="footer__grid">
+      <div>
+        <p class="footer__label">Explore</p>
+        <ul>{[...nav, ...navSecondary].map((l) => <li><a class="link-underline" href={l.href}>{l.label}</a></li>)}</ul>
+      </div>
+      <div>
+        <p class="footer__label">Follow</p>
+        <ul>
+          {site.socials.map((s) => <li><a class="link-underline" href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        <p class="footer__label">Family</p>
+        <ul>
+          <li><a class="link-underline" href={site.church.url} target="_blank" rel="noopener">{site.church.name}</a></li>
+          <li><a class="link-underline" href={site.ruth.url} target="_blank" rel="noopener">{site.ruth.name}</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="footer__label">Write to us</p>
+        <a class="link-underline" href={`mailto:${site.email}`}>{site.email}</a>
+        <fieldset class="motion-toggle" data-motion-toggle>
+          <legend class="footer__label">Motion</legend>
+          <label><input type="radio" name="motion" value="full" /> Full</label>
+          <label><input type="radio" name="motion" value="lite" /> Data saver</label>
+          <label><input type="radio" name="motion" value="reduced" /> Still</label>
+        </fieldset>
+      </div>
+    </div>
+
+    <div class="footer__mark" aria-hidden="true" data-marquee="38">
+      <div class="footer__mark-track" data-marquee-track>
+        <span>Inspiring People · Sharing Life · </span><span>Inspiring People · Sharing Life · </span>
+      </div>
+    </div>
+
+    <div class="footer__base">
+      <p>© {year} {site.title}. All rights reserved.</p>
+      <p><a href="#main" class="link-underline">Back to top ↑</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Lets visitors override the automatic motion tier (e.g. to save data).
+  function setupToggle() {
+    const box = document.querySelector('[data-motion-toggle]');
+    if (!box) return;
+    const current = document.documentElement.dataset.motion;
+    box.querySelectorAll<HTMLInputElement>('input').forEach((input) => {
+      input.checked = input.value === current;
+      input.addEventListener('change', () => {
+        try {
+          localStorage.setItem('motion', input.value);
+        } catch {}
+        location.reload();
+      });
+    });
+  }
+  document.addEventListener('astro:page-load', setupToggle);
+</script>
+
+<style>
+  .footer {
+    position: relative;
+    overflow: hidden;
+    background: var(--c-ink);
+    padding-top: var(--section);
+    border-top: 1px solid var(--c-line);
+  }
+  .footer__cta {
+    max-width: 900px;
+    margin-bottom: clamp(4rem, 8vw, 7rem);
+  }
+  .footer__title {
+    font-size: var(--fs-h1);
+    margin-bottom: 2.5rem;
+  }
+  .footer__cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .footer__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+    padding-block: 3rem;
+    border-top: 1px solid var(--c-line);
+    font-size: 0.95rem;
+  }
+  .footer__grid ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .footer__label {
+    font-size: var(--fs-eyebrow);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--c-text-dim);
+    margin-bottom: 1rem;
+  }
+  .motion-toggle {
+    margin: 2rem 0 0;
+    padding: 0;
+    border: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+  }
+  .motion-toggle legend {
+    padding: 0;
+  }
+  .motion-toggle label {
+    display: inline-flex;
+    gap: 0.4rem;
+    align-items: center;
+    cursor: pointer;
+  }
+  .motion-toggle input {
+    accent-color: var(--c-accent);
+  }
+  .footer__mark {
+    overflow: hidden;
+    white-space: nowrap;
+    padding-block: 1rem;
+    margin-inline: calc(var(--gutter) * -1);
+  }
+  .footer__mark-track {
+    display: inline-flex;
+    font-family: var(--ff-display);
+    font-size: clamp(4rem, 14vw, 13rem);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in oklab, var(--c-accent) 60%, transparent);
+  }
+  .footer__mark-track span {
+    padding-right: 0.3em;
+  }
+  .footer__base {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 2rem;
+    border-top: 1px solid var(--c-line);
+    font-size: var(--fs-small);
+    color: var(--c-text-dim);
+  }
+  .footer__base p {
+    margin: 0;
+  }
+  @media (max-width: 860px) {
+    .footer__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

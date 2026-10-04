@@ -1,0 +1,130 @@
+---
+/**
+ * Adaptive background film.
+ * - full tier: sources attach and the loop autoplays when in view
+ * - lite tier: the poster gets a slow CSS Ken Burns drift and a "Play film"
+ *   button, so the video downloads only if the visitor asks for it
+ * - reduced: static poster
+ */
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  poster: ImageMetadata;
+  webm?: string;
+  mp4?: string;
+  label?: string;
+  class?: string;
+  showPlay?: boolean;
+  transitionName?: string;
+}
+
+const { poster, webm, mp4, label = 'Background film', class: cls, showPlay = true, transitionName } = Astro.props;
+const posterImg = await getImage({ src: poster, width: 1920, format: 'webp', quality: 72 });
+const posterSmall = await getImage({ src: poster, width: 900, format: 'webp', quality: 68 });
+const hasVideo = Boolean(webm || mp4);
+---
+
+<div class:list={['film', cls]} data-film transition:name={transitionName}>
+  <picture class="film__poster">
+    <source media="(max-width: 700px)" srcset={posterSmall.src} />
+    <img src={posterImg.src} alt="" width={posterImg.attributes.width} height={posterImg.attributes.height} fetchpriority="high" decoding="async" />
+  </picture>
+  {
+    hasVideo && (
+      <video
+        class="film__video"
+        muted
+        loop
+        playsinline
+        preload="none"
+        aria-label={label}
+        data-adaptive-video
+        data-src-webm={webm}
+        data-src-mp4={mp4}
+      />
+    )
+  }
+  <div class="film__shade" aria-hidden="true"></div>
+  {
+    hasVideo && showPlay && (
+      <button class="film__play" type="button" data-play-film>
+        <span class="film__play-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z" /></svg>
+        </span>
+        Play film
+      </button>
+    )
+  }
+</div>
+
+<style>
+  .film {
+    position: relative;
+    overflow: hidden;
+    background: var(--c-ink-2);
+  }
+  .film__poster,
+  .film__poster img,
+  .film__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .film__video {
+    opacity: 0;
+    transition: opacity 1.2s var(--ease-out);
+  }
+  .film.is-playing .film__video {
+    opacity: 1;
+  }
+  :global(html[data-motion='lite']) .film:not(.is-playing) .film__poster img {
+    animation: kenburns 24s var(--ease-in-out) infinite alternate;
+  }
+  @keyframes kenburns {
+    from {
+      transform: scale(1.02) translate(0, 0);
+    }
+    to {
+      transform: scale(1.14) translate(-2%, -1.5%);
+    }
+  }
+  .film__shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgb(13 18 32 / 0.55) 0%, rgb(13 18 32 / 0.1) 35%, rgb(13 18 32 / 0.85) 100%),
+      radial-gradient(120% 80% at 70% 30%, transparent 30%, rgb(13 18 32 / 0.5));
+  }
+  .film__play {
+    position: absolute;
+    right: var(--gutter);
+    bottom: clamp(1.5rem, 4vw, 3rem);
+    z-index: 3;
+    display: none;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .film__play-icon {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50%;
+    border: 1px solid currentColor;
+  }
+  .film__play-icon svg {
+    width: 1rem;
+    margin-left: 2px;
+  }
+  :global(html[data-motion='lite']) .film__play,
+  :global(html[data-motion='reduced']) .film__play {
+    display: inline-flex;
+  }
+</style>

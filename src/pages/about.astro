@@ -1,0 +1,124 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site';
+import portrait from '../assets/media/portrait.jpg';
+import couple from '../assets/media/couple.jpg';
+import stage from '../assets/media/stage.jpg';
+import crowd from '../assets/media/crowd.jpg';
+
+// TODO: replace with the biography from the current /about/ and
+// /who-is-emmanuel-makandiwa/ pages, and confirm milestones with the ministry.
+const chapters = [
+  {
+    kicker: 'Calling',
+    title: 'A life given to the word',
+    body: 'From a young age Emmanuel Makandiwa sensed a call to ministry. Years of study, prayer and pastoral service shaped a teacher whose messages are marked by revelation and practical faith.',
+    image: stage,
+  },
+  {
+    kicker: 'Founding',
+    title: 'United Family International Church',
+    body: 'In 2010 he founded United Family International Church in Harare, Zimbabwe. It has grown into one of the largest ministries in the region, with branches across Africa, Europe and Australia.',
+    image: crowd,
+  },
+];
+---
+
+<Base title="About" description="The story of Prophet Emmanuel Makandiwa, founding President of United Family International Church.">
+  <PageHero
+    eyebrow="About"
+    title="Who is"
+    accent="Emmanuel Makandiwa?"
+    lead={`Founding President of ${site.church.name}, teacher, author and husband to Ruth Makandiwa: a man whose message has inspired millions to renew their minds and live with purpose.`}
+    image={portrait}
+    imageAlt="Portrait of Emmanuel Makandiwa"
+    transitionName="portrait"
+  />
+
+  <section class="section">
+    <div class="container narrow">
+      <p class="about__statement" data-scrub-words>
+        His ministry rests on a simple conviction: when people encounter the truth of God's word, their thinking changes, and
+        when their thinking changes, their whole life follows.
+      </p>
+    </div>
+  </section>
+
+  {
+    chapters.map((c, i) => (
+      <section class:list={['section chapter', { 'chapter--flip': i % 2 }]}>
+        <div class="container chapter__grid">
+          <div class="chapter__media" data-reveal="clip">
+            <Image src={c.image} alt="" widths={[600, 1000, 1400]} sizes="(max-width: 900px) 100vw, 50vw" />
+          </div>
+          <div>
+            <p class="eyebrow">{c.kicker}</p>
+            <h2 class="section-title" data-split>{c.title}</h2>
+            <p class="lead dim" data-reveal="up">{c.body}</p>
+          </div>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section section--light">
+    <div class="container chapter__grid">
+      <div>
+        <p class="eyebrow">Family</p>
+        <h2 class="section-title" data-split>Emmanuel &<br /><span class="italic">Ruth Makandiwa</span></h2>
+        <p class="lead dim" data-reveal="up">
+          Together they lead the ministry, host seminars, conferences and masterclasses, and write the monthly Life Lighter
+          devotional. Ruth Makandiwa also leads the Victorious Ladies meetings, empowering women across the nations.
+        </p>
+        <a class="btn" href={site.ruth.url} target="_blank" rel="noopener" data-reveal="up">Visit Ruth Makandiwa</a>
+      </div>
+      <div class="chapter__media chapter__media--tall" data-reveal="clip">
+        <Image src={couple} alt="Emmanuel and Ruth Makandiwa" widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 45vw" />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .narrow {
+    max-width: 1100px;
+  }
+  .about__statement {
+    font-family: var(--ff-display);
+    font-size: clamp(1.8rem, 3.6vw, 3.3rem);
+    line-height: 1.2;
+    margin: 0;
+  }
+  .chapter__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .chapter--flip .chapter__media {
+    order: 2;
+  }
+  .chapter__media {
+    aspect-ratio: 5 / 4;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+  }
+  .chapter__media--tall {
+    aspect-ratio: 4 / 5;
+  }
+  .chapter__media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (max-width: 900px) {
+    .chapter__grid {
+      grid-template-columns: 1fr;
+    }
+    .chapter--flip .chapter__media {
+      order: 0;
+    }
+  }
+</style>

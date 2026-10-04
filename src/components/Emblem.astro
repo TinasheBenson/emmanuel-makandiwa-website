@@ -1,0 +1,71 @@
+---
+/**
+ * Scroll-driven emblem: a circle of light morphs into a flame, then a cross,
+ * while a ring of text turns around it (MorphSVGPlugin, see motion.ts).
+ */
+interface Props {
+  class?: string;
+}
+const { class: cls } = Astro.props;
+
+const light =
+  'M100,30 C138.66,30 170,61.34 170,100 C170,138.66 138.66,170 100,170 C61.34,170 30,138.66 30,100 C30,61.34 61.34,30 100,30 Z';
+const flame =
+  'M100,25 C125,65 160,90 150,130 C142,160 120,175 100,175 C80,175 58,160 50,130 C40,90 75,65 100,25 Z';
+const cross = 'M89,30 L111,30 L111,70 L148,70 L148,92 L111,92 L111,170 L89,170 L89,92 L52,92 L52,70 L89,70 Z';
+---
+
+<div class:list={['emblem', cls]} aria-hidden="true">
+  <svg viewBox="0 0 200 200" class="emblem__ring">
+    <defs>
+      <path id="emblem-ring" d="M100,100 m-88,0 a88,88 0 1,1 176,0 a88,88 0 1,1 -176,0" />
+    </defs>
+    <text>
+      <textPath href="#emblem-ring" textLength="548">INSPIRING PEOPLE · SHARING LIFE · INSPIRING PEOPLE · SHARING LIFE ·</textPath>
+    </text>
+  </svg>
+  <svg viewBox="0 0 200 200" class="emblem__shape" data-morph>
+    <path d={light} data-morph-shape fill="currentColor" />
+    <path d={flame} data-morph-shape fill="currentColor" />
+    <path d={cross} data-morph-shape fill="currentColor" />
+  </svg>
+</div>
+
+<style>
+  .emblem {
+    position: relative;
+    aspect-ratio: 1;
+  }
+  .emblem svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .emblem__ring {
+    animation: spin 40s linear infinite;
+  }
+  .emblem__ring text {
+    font-family: var(--ff-sans);
+    font-size: 9.5px;
+    letter-spacing: 0.25em;
+    fill: currentColor;
+  }
+  .emblem__shape {
+    transform: scale(0.62);
+    transform-origin: 50% 50%;
+  }
+  /* Without JS/morphing, show only the cross. */
+  .emblem__shape path:not(:last-child) {
+    display: none;
+  }
+  :global(html.js:not([data-motion='reduced'])) .emblem__shape path {
+    display: block;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+</style>

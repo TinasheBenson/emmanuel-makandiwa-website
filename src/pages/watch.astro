@@ -1,0 +1,110 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import YouTube from '../components/YouTube.astro';
+import { site } from '../data/site';
+
+const videos = (await getCollection('messages'))
+  .filter((m) => m.data.youtubeId)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const [latest] = videos;
+---
+
+<Base title="Watch & Listen" description="Watch sermons on YouTube and listen to the Emmanuel Makandiwa podcast.">
+  <PageHero
+    eyebrow="Watch & Listen"
+    title="The word,"
+    accent="wherever you are"
+    lead="Nothing streams until you press play, so you stay in control of your data. Wi-Fi recommended for video."
+  />
+
+  {
+    latest && (
+      <section class="section watch-latest">
+        <div class="container">
+          <p class="eyebrow">Latest message</p>
+          <div class="watch-latest__grid">
+            <div data-reveal="up">
+              <YouTube id={latest.data.youtubeId!} title={latest.data.title} transitionName={`message-media-${latest.id}`} />
+            </div>
+            <div data-reveal="up">
+              <h2 class="section-title">{latest.data.title}</h2>
+              <p class="dim">{latest.data.summary}</p>
+              <a class="btn btn--ghost" href={`/messages/${latest.id}/`}>Read the notes</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section section--light">
+    <div class="container platforms">
+      <a class="platform" href={site.youtube.channelUrl} target="_blank" rel="noopener" data-reveal="up">
+        <span class="eyebrow">YouTube</span>
+        <h3>Sermons & services</h3>
+        <p class="dim">Full messages, highlights and live services on the official channel.</p>
+        <span class="platform__cta">Subscribe →</span>
+      </a>
+      <a class="platform" href={site.podcast.url} target="_blank" rel="noopener" data-reveal="up">
+        <span class="eyebrow">Podcast</span>
+        <h3>Listen on Spotify</h3>
+        <p class="dim">Audio messages that use a fraction of the data of video. Perfect for the commute.</p>
+        <span class="platform__cta">Listen →</span>
+      </a>
+      <a class="platform" href="/messages/" data-reveal="up">
+        <span class="eyebrow">Read</span>
+        <h3>Message notes</h3>
+        <p class="dim">Written summaries of teachings, the lightest way to catch up.</p>
+        <span class="platform__cta">Browse →</span>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .watch-latest {
+    padding-top: 0;
+  }
+  .watch-latest__grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: clamp(2rem, 4vw, 4rem);
+    align-items: center;
+  }
+  .platforms {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+  .platform {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(1.5rem, 3vw, 2.5rem);
+    border-radius: var(--radius-lg);
+    background: var(--c-paper-2);
+    min-height: 320px;
+    transition:
+      transform var(--dur) var(--ease-out),
+      background var(--dur);
+  }
+  .platform:hover {
+    transform: translateY(-6px);
+    background: #fff;
+  }
+  .platform h3 {
+    font-size: var(--fs-h3);
+    margin-bottom: 0.8rem;
+  }
+  .platform__cta {
+    margin-top: auto;
+    font-weight: 600;
+  }
+  @media (max-width: 900px) {
+    .watch-latest__grid,
+    .platforms {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,84 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+}
+
+const { title, description = site.description, image = '/media/og-default.jpg' } = Astro.props;
+const fullTitle = title ? `${title} | ${site.title}` : `${site.title} | ${site.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(image, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta name="theme-color" content="#0d1220" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!--
+      Motion tier, decided before first paint so nothing flashes.
+      A visitor's explicit choice (footer toggle) always wins.
+    -->
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        function tier() {
+          try {
+            var o = localStorage.getItem('motion');
+            if (o === 'full' || o === 'lite' || o === 'reduced') return o;
+          } catch (e) {}
+          if (matchMedia('(prefers-reduced-motion: reduce)').matches) return 'reduced';
+          var c = navigator.connection || {};
+          if (c.saveData) return 'lite';
+          if (c.effectiveType && /2g|3g/.test(c.effectiveType)) return 'lite';
+          if (navigator.deviceMemory && navigator.deviceMemory < 4) return 'lite';
+          // Touch devices only get autoplay film when we know they're on Wi-Fi.
+          if (matchMedia('(pointer: coarse)').matches && c.type !== 'wifi') return 'lite';
+          return 'full';
+        }
+        function apply() {
+          d.classList.add('js');
+          d.dataset.motion = tier();
+        }
+        apply();
+        document.addEventListener('astro:after-swap', apply);
+        // Failsafe: if the motion bundle never boots, show everything.
+        setTimeout(function () {
+          if (!window.__motionBooted) d.dataset.motion = 'reduced';
+        }, 4000);
+      })();
+    </script>
+
+    <ClientRouter fallback="animate" />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import '../scripts/motion';
+    </script>
+  </body>
+</html>

@@ -1,1 +1,69 @@
 # emmanuel-makandiwa-website
+
+The new emmanuelmakandiwa.com: a static [Astro](https://astro.build) site with cinematic, data-aware motion, deployed on Vercel.
+
+## Stack
+
+| Concern | Choice |
+| --- | --- |
+| Framework | Astro 7 (static output, ~zero JS by default) |
+| Page transitions | Astro `ClientRouter` + View Transitions API (`transition:name` for match-move) |
+| Animation | GSAP 3 (ScrollTrigger, SplitText, Flip, MorphSVG, all free since 2025) |
+| Smooth scroll | Lenis (desktop "full" tier only) |
+| Video | HyperFrames compositions rendered to small MP4/WebM loops (`video/`) |
+| Content | Markdown content collections in `src/content/` |
+| Fonts | Self-hosted via Fontsource |
+
+## Getting started
+
+```sh
+npm install
+npm run dev        # http://localhost:4321
+npm run build      # static site in dist/
+```
+
+## Motion tiers
+
+Visitors in Zimbabwe pay some of the highest mobile-data prices in the world, so motion adapts to the device. The inline script in `src/layouts/Base.astro` sets `<html data-motion>` before first paint:
+
+| Tier | Who gets it | What happens |
+| --- | --- | --- |
+| `full` | Desktop, or touch devices on Wi-Fi | Background films autoplay, Lenis smooth scroll, every effect |
+| `lite` | Mobile data, Save-Data, 2G/3G, low-memory devices | All GSAP motion, but no autoplay video (poster + CSS Ken Burns with a "Play film" button) |
+| `reduced` | `prefers-reduced-motion` | Content simply appears; no movement |
+
+Visitors can override the tier from the footer ("Full / Data saver / Still"). The animation engine lives in `src/scripts/motion.ts` and is driven by data attributes:
+
+| Attribute | Effect |
+| --- | --- |
+| `data-split` / `data-split="hero"` | Headline words rise out of masked lines (on scroll / immediately) |
+| `data-reveal="up" \| "fade" \| "clip"` | Fade-up, fade, or image wipe with zoom settle |
+| `data-scrub-words` | Words brighten one by one as you scroll |
+| `data-parallax="0.1"` | Scroll parallax |
+| `data-hero-morph` | Full-bleed hero pulls back into a rounded card |
+| `data-hscroll` | Pinned horizontal story track (desktop) |
+| `svg[data-morph]` | MorphSVG shape sequence (see `Emblem.astro`) |
+| `data-counter` | Count-up numbers |
+| `data-marquee` | Velocity-reactive marquee |
+| `data-magnetic` | Magnetic hover (fine pointers) |
+| `transition:name` | Shared-element morph between pages (message cards → message page, portrait → About, book covers) |
+
+## Content
+
+- `src/content/messages/*.md`: sermons (optional `youtubeId` renders a click-to-load player)
+- `src/content/books/*.md`: books and Life Lighter editions
+- `src/content/events/*.md`: events
+- `src/data/site.ts`: navigation, socials, contact details
+
+Entries with `placeholder: true` are design samples and show a "Sample" tag. **Delete them before launch.** Copy marked `TODO` in the source is provisional and must be replaced with the wording from the current site.
+
+## Brand
+
+`src/styles/tokens.css` holds every colour, type and motion token. The current values are **placeholders** until the existing site's logo, colours and fonts are audited. Swap them there and the whole site follows.
+
+## QA
+
+```sh
+npm run build && npx astro preview &
+node scripts/screenshots.mjs screenshots   # full-page shots of every route, desktop + mobile
+```

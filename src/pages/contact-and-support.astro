@@ -1,0 +1,137 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { site } from '../data/site';
+---
+
+<Base title="Contact & Support" description="Get in touch with the ministry of Prophet Emmanuel Makandiwa.">
+  <PageHero eyebrow="Contact & Support" title="We'd love to" accent="hear from you" lead="Questions, prayer requests, testimonies or media enquiries: write to us and the team will respond." />
+
+  <section class="section contact">
+    <div class="container contact__grid">
+      <div class="contact__info" data-reveal="up">
+        <p class="eyebrow">Email</p>
+        <a class="contact__email link-underline" href={`mailto:${site.email}`}>{site.email}</a>
+        <p class="eyebrow">Church</p>
+        <p><a class="link-underline" href={site.church.url} target="_blank" rel="noopener">{site.church.name}</a><br /><span class="dim">Harare, Zimbabwe</span></p>
+        <p class="eyebrow">Follow</p>
+        <ul class="contact__socials">
+          {site.socials.map((s) => <li><a class="link-underline" href={s.href} target="_blank" rel="noopener">{s.label}</a></li>)}
+        </ul>
+      </div>
+
+      <!--
+        No backend on a static site: the form composes an email in the visitor's
+        mail app. TODO: switch to a form service (e.g. Formspree) if the
+        ministry wants submissions collected centrally.
+      -->
+      <form class="form" data-contact-form data-reveal="up">
+        <label>
+          <span>Your name</span>
+          <input name="name" required autocomplete="name" />
+        </label>
+        <label>
+          <span>Reason</span>
+          <select name="reason">
+            <option>General enquiry</option>
+            <option>Prayer request</option>
+            <option>Testimony</option>
+            <option>Media & invitations</option>
+          </select>
+        </label>
+        <label class="form__full">
+          <span>Message</span>
+          <textarea name="message" rows="6" required></textarea>
+        </label>
+        <button class="btn" type="submit" data-magnetic>Compose email</button>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { site } from '../data/site';
+  function setupForm() {
+    const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+    form?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      const subject = `${data.get('reason')} from ${data.get('name')}`;
+      const body = String(data.get('message') ?? '');
+      location.href = `mailto:${site.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+  }
+  document.addEventListener('astro:page-load', setupForm);
+</script>
+
+<style>
+  .contact {
+    padding-top: 0;
+  }
+  .contact__grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(2rem, 6vw, 6rem);
+  }
+  .contact__email {
+    display: inline-block;
+    font-family: var(--ff-display);
+    font-size: clamp(1.4rem, 2.6vw, 2.2rem);
+    margin-bottom: 2.5rem;
+    word-break: break-word;
+  }
+  .contact__info .eyebrow {
+    margin-bottom: 0.75rem;
+  }
+  .contact__info p {
+    margin-bottom: 2rem;
+  }
+  .contact__socials {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 1.5rem;
+  }
+  .form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+    align-content: start;
+  }
+  .form label {
+    display: grid;
+    gap: 0.5rem;
+    font-size: var(--fs-small);
+    color: var(--c-text-dim);
+  }
+  .form__full {
+    grid-column: 1 / -1;
+  }
+  .form input,
+  .form select,
+  .form textarea {
+    font: inherit;
+    font-size: 1rem;
+    color: var(--c-text);
+    background: var(--c-ink-2);
+    border: 1px solid var(--c-line);
+    border-radius: var(--radius);
+    padding: 0.9rem 1rem;
+    transition: border-color var(--dur-fast);
+  }
+  .form :is(input, select, textarea):focus {
+    border-color: var(--c-accent);
+    outline: none;
+  }
+  .form .btn {
+    justify-self: start;
+  }
+  @media (max-width: 900px) {
+    .contact__grid,
+    .form {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

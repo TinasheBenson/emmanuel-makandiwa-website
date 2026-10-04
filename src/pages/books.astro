@@ -1,0 +1,123 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection, render } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+
+const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order);
+const rendered = await Promise.all(books.map(async (b) => ({ book: b, Content: (await render(b)).Content })));
+---
+
+<Base title="Books & Life Lighter" description="Books and the Life Lighter monthly devotional by Emmanuel and Ruth Makandiwa.">
+  <PageHero
+    eyebrow="Books & devotionals"
+    title="Life"
+    accent="Lighter"
+    lead="A 30-day devotional by Emmanuel and Ruth Makandiwa, released monthly in English and Shona, with a message, scripture, declaration and prayer for every day."
+  />
+
+  <section class="section library">
+    <div class="container library__grid">
+      {
+        rendered.map(({ book, Content }) => (
+          <article class="book">
+            <div class="book__cover" transition:name={`book-cover-${book.id}`}>
+              <Image src={book.data.cover} alt={`Cover of ${book.data.title}`} widths={[300, 500, 700]} sizes="(max-width: 700px) 70vw, 22vw" />
+              <span class="book__spine" aria-hidden="true" />
+            </div>
+            <div class="book__info" data-reveal="up">
+              <h2>{book.data.title}</h2>
+              {book.data.subtitle && <p class="book__sub">{book.data.subtitle}</p>}
+              <p class="dim book__authors">{book.data.authors}</p>
+              <div class="dim book__desc"><Content /></div>
+              <div class="book__links">
+                {book.data.links.map((l) => (
+                  <a class="btn btn--ghost" href={l.href} target="_blank" rel="noopener">{l.label}</a>
+                ))}
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .library {
+    padding-top: 0;
+  }
+  .library__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(3rem, 6vw, 5rem) clamp(2rem, 5vw, 5rem);
+  }
+  .book {
+    display: grid;
+    grid-template-columns: minmax(140px, 0.8fr) 1.2fr;
+    gap: 2rem;
+    align-items: start;
+  }
+  .book__cover {
+    position: relative;
+    aspect-ratio: 2 / 3;
+    border-radius: 4px 8px 8px 4px;
+    overflow: hidden;
+    box-shadow:
+      0 30px 60px -20px rgb(0 0 0 / 0.6),
+      0 0 0 1px rgb(255 255 255 / 0.06);
+    transform: perspective(900px) rotateY(-14deg);
+    transform-origin: left center;
+    transition: transform 0.9s var(--ease-out);
+  }
+  .book:hover .book__cover {
+    transform: perspective(900px) rotateY(0deg) translateY(-6px);
+  }
+  .book__cover :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .book__spine {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 10%;
+    background: linear-gradient(90deg, rgb(0 0 0 / 0.35), rgb(255 255 255 / 0.08) 60%, transparent);
+  }
+  .book h2 {
+    font-size: var(--fs-h3);
+    margin-bottom: 0.4rem;
+  }
+  .book__sub {
+    font-family: var(--ff-display);
+    font-style: italic;
+    color: var(--c-accent);
+    font-size: 1.15rem;
+    margin-bottom: 0.4rem;
+  }
+  .book__authors {
+    font-size: var(--fs-small);
+    margin-bottom: 1rem;
+  }
+  .book__desc {
+    font-size: 0.95rem;
+  }
+  .book__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  @media (max-width: 1000px) {
+    .library__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 520px) {
+    .book {
+      grid-template-columns: 1fr;
+    }
+    .book__cover {
+      max-width: 240px;
+    }
+  }
+</style>

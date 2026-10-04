@@ -1,0 +1,119 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Emblem from '../components/Emblem.astro';
+import { site } from '../data/site';
+
+// TODO: the ministry must supply its official giving channels (online giving
+// URL, mobile money and bank details). Never publish unverified account details.
+const ways = [
+  { title: 'Give online', copy: 'Secure card giving through the official UFIC channels.', cta: 'Give online', href: site.church.url, pending: false },
+  { title: 'Mobile money', copy: 'EcoCash and other mobile money options for partners in Zimbabwe.', cta: 'Details coming soon', href: undefined, pending: true },
+  { title: 'Bank transfer', copy: 'Local and international bank transfer details for partners worldwide.', cta: 'Details coming soon', href: undefined, pending: true },
+];
+---
+
+<Base title="Give" description="Partner with the ministry of Prophet Emmanuel Makandiwa.">
+  <PageHero
+    eyebrow="Give"
+    title="Partner with"
+    accent="the vision"
+    lead="Your giving carries the message further: into stadiums, homes and nations. Thank you for sowing into lives being transformed."
+  />
+
+  <section class="section give">
+    <div class="container give__grid">
+      <div class="give__ways">
+        {
+          ways.map((w) => (
+            <article class="way" data-reveal="up">
+              <h2>{w.title}</h2>
+              <p class="dim">{w.copy}</p>
+              {w.href ? (
+                <a class="btn" href={w.href} target="_blank" rel="noopener" data-magnetic>{w.cta}</a>
+              ) : (
+                <span class="way__pending">{w.cta}</span>
+              )}
+            </article>
+          ))
+        }
+      </div>
+      <Emblem class="give__emblem" />
+    </div>
+  </section>
+
+  <section class="section section--light">
+    <div class="container give__verse">
+      <p data-scrub-words>
+        “Give, and it will be given to you. A good measure, pressed down, shaken together and running over, will be poured into
+        your lap.”
+      </p>
+      <span class="eyebrow">Luke 6:38</span>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .give {
+    padding-top: 0;
+  }
+  .give__grid {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .give__ways {
+    display: grid;
+    gap: 1.25rem;
+  }
+  .way {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-areas: 'title cta' 'copy cta';
+    gap: 0.25rem 2rem;
+    align-items: center;
+    padding: clamp(1.5rem, 3vw, 2.25rem);
+    border-radius: var(--radius-lg);
+    background: var(--c-ink-2);
+    border: 1px solid var(--c-line);
+  }
+  .way h2 {
+    grid-area: title;
+    font-size: var(--fs-h3);
+  }
+  .way p {
+    grid-area: copy;
+    margin: 0;
+  }
+  .way .btn,
+  .way__pending {
+    grid-area: cta;
+  }
+  .way__pending {
+    font-size: var(--fs-small);
+    color: var(--c-text-dim);
+  }
+  .give :global(.give__emblem) {
+    color: var(--c-accent);
+    max-width: 360px;
+  }
+  .give__verse {
+    max-width: 1000px;
+  }
+  .give__verse p {
+    font-family: var(--ff-display);
+    font-size: clamp(1.8rem, 3.6vw, 3.2rem);
+    line-height: 1.2;
+  }
+  @media (max-width: 900px) {
+    .give__grid {
+      grid-template-columns: 1fr;
+    }
+    .way {
+      grid-template-columns: 1fr;
+      grid-template-areas: 'title' 'copy' 'cta';
+      gap: 0.75rem;
+    }
+  }
+</style>

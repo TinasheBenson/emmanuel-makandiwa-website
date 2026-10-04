@@ -1,0 +1,557 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Film from '../components/Film.astro';
+import MessageCard from '../components/MessageCard.astro';
+import Emblem from '../components/Emblem.astro';
+import { site } from '../data/site';
+
+import hero from '../assets/media/hero.jpg';
+import portrait from '../assets/media/portrait.jpg';
+import stage from '../assets/media/stage.jpg';
+import crowd from '../assets/media/crowd.jpg';
+import worship from '../assets/media/worship.jpg';
+import conference from '../assets/media/conference.jpg';
+import outreach from '../assets/media/outreach.jpg';
+
+const messages = (await getCollection('messages')).sort((a, b) => {
+  if (a.data.featured !== b.data.featured) return a.data.featured ? -1 : 1;
+  return b.data.date.valueOf() - a.data.date.valueOf();
+});
+const [featured, ...rest] = messages;
+const books = (await getCollection('books')).sort((a, b) => a.data.order - b.data.order).slice(0, 3);
+const now = new Date();
+const events = (await getCollection('events'))
+  .filter((e) => e.data.start >= now)
+  .sort((a, b) => a.data.start.valueOf() - b.data.start.valueOf())
+  .slice(0, 3);
+const dateFmt = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short' });
+
+// TODO: confirm each line against the current site's "Transforming Lives" copy.
+const stories = [
+  { title: 'Seminars', copy: 'Teaching that renews the mind and equips believers for everyday life.', image: stage },
+  { title: 'Conferences', copy: 'Gatherings where nations meet to hear the word and encounter God together.', image: conference },
+  { title: 'Masterclasses', copy: 'Focused sessions with Emmanuel and Ruth Makandiwa on purpose, family and growth.', image: worship },
+  { title: 'Crusades', copy: 'Stadium nights of worship, prophecy and prayer that draw multitudes.', image: crowd },
+  { title: 'Outreach', copy: 'Love in action, reaching communities with compassion and practical help.', image: outreach },
+];
+---
+
+<Base>
+  <!-- 1 · Hero: full-bleed film that pulls back into a card as you scroll -->
+  <section class="hero" data-hero-morph>
+    <div class="hero__media" data-hero-media>
+      <Film poster={hero} webm="/video/hero.webm" mp4="/video/hero.mp4" label="Highlights from the ministry of Emmanuel Makandiwa" class="hero__film" />
+    </div>
+    <div class="hero__content container" data-hero-content>
+      <p class="eyebrow" data-reveal="fade">Prophet Emmanuel Makandiwa</p>
+      <h1 class="hero__title" data-split="hero">Inspiring People.<br /><span class="italic">Sharing Life.</span></h1>
+      <div class="hero__actions" data-reveal="up">
+        <a href={`/messages/${featured.id}/`} class="btn" data-magnetic>
+          Watch the latest message
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6" /></svg>
+        </a>
+        <a href="/about/" class="btn btn--ghost">Discover his story</a>
+      </div>
+    </div>
+    <div class="hero__scroll" aria-hidden="true"><span></span>Scroll</div>
+  </section>
+
+  <!-- 2 · Statement + portrait (portrait morphs into the About hero) -->
+  <section class="section intro">
+    <div class="container intro__grid">
+      <div>
+        <p class="eyebrow">The man & the mission</p>
+        <p class="intro__statement" data-scrub-words>
+          Emmanuel Makandiwa is the founding President of {site.church.name}. Together with his wife Ruth, he has spent his life
+          helping people discover the God who transforms minds, families and nations.
+        </p>
+        <a href="/about/" class="btn btn--ghost" data-reveal="up">Read the full story</a>
+      </div>
+      <a href="/about/" class="intro__portrait frame" transition:name="portrait" aria-label="About Emmanuel Makandiwa">
+        <Image src={portrait} alt="Portrait of Emmanuel Makandiwa" widths={[500, 800, 1100]} sizes="(max-width: 900px) 100vw, 40vw" data-parallax="0.08" />
+      </a>
+    </div>
+  </section>
+
+  <!-- 3 · Marquee -->
+  <div class="ribbon" data-marquee="30" aria-hidden="true">
+    <div class="ribbon__track" data-marquee-track>
+      {[0, 1].map(() => (
+        <span>Faith <i>✦</i> Hope <i>✦</i> Love <i>✦</i> Purpose <i>✦</i> Family <i>✦</i> Nations <i>✦</i>&nbsp;</span>
+      ))}
+    </div>
+  </div>
+
+  <!-- 4 · Messages -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Messages</p>
+          <h2 class="section-title" data-split>A word in<br /><span class="italic">due season</span></h2>
+        </div>
+        <a href="/messages/" class="btn btn--ghost" data-reveal="up">All messages</a>
+      </div>
+      <div class="messages-grid">
+        <div class="messages-grid__featured"><MessageCard entry={featured} size="large" /></div>
+        {rest.slice(0, 2).map((m) => <MessageCard entry={m} />)}
+      </div>
+    </div>
+  </section>
+
+  <!-- 5 · Transforming lives: pinned horizontal journey -->
+  <section class="stories" data-hscroll>
+    <div class="stories__track" data-hscroll-track>
+      <div class="stories__intro">
+        <p class="eyebrow">Transforming lives</p>
+        <h2 class="section-title" data-split>Gatherings that<br /><span class="italic">change everything</span></h2>
+        <p class="dim" data-reveal="up">Over the years, Emmanuel and Ruth Makandiwa have hosted seminars, conferences and masterclasses that have inspired millions.</p>
+        <a href="/transforming-lives/" class="btn btn--ghost" data-reveal="up">Explore the impact</a>
+      </div>
+      {
+        stories.map((s, i) => (
+          <article class="story">
+            <div class="story__media frame">
+              <Image src={s.image} alt="" widths={[500, 900]} sizes="(max-width: 900px) 90vw, 32vw" data-hscroll-media />
+            </div>
+            <span class="story__num">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{s.title}</h3>
+            <p class="dim">{s.copy}</p>
+          </article>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- 6 · Numbers + morphing emblem -->
+  <section class="section section--light numbers">
+    <div class="container numbers__grid">
+      <Emblem class="numbers__emblem" />
+      <div class="numbers__stats">
+        <!-- TODO: confirm figures with the ministry before launch -->
+        <div data-reveal="up"><strong data-counter="2010" data-plain>2010</strong><span class="dim">United Family International Church founded in Harare</span></div>
+        <div data-reveal="up"><strong data-counter="6">6</strong><span class="dim">Nations with UFIC branches across Africa, Europe and Australia</span></div>
+        <div data-reveal="up"><strong data-counter="30">30</strong><span class="dim">Days of devotion in every monthly edition of Life Lighter</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7 · Books -->
+  <section class="section books-teaser">
+    <div class="container books-teaser__grid">
+      <div>
+        <p class="eyebrow">Books & devotionals</p>
+        <h2 class="section-title" data-split>Life <span class="italic">Lighter</span></h2>
+        <p class="lead dim" data-reveal="up">A 30-day devotional with a message, scripture, declaration and prayer for every day, released monthly in English and Shona.</p>
+        <a href="/books/" class="btn" data-reveal="up" data-magnetic>Browse the library</a>
+      </div>
+      <div class="books-fan">
+        {
+          books.map((b, i) => (
+            <a href="/books/" class="books-fan__item" style={`--i:${i}`} transition:name={`book-cover-${b.id}`} aria-label={b.data.title}>
+              <Image src={b.data.cover} alt="" widths={[300, 500]} sizes="220px" />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- 8 · Watch & listen + events -->
+  <section class="section section--light">
+    <div class="container split">
+      <div class="watch-card grain" data-reveal="up">
+        <Image src={stage} alt="" widths={[600, 1000]} sizes="(max-width: 900px) 100vw, 50vw" class="watch-card__bg" />
+        <div class="watch-card__body">
+          <p class="eyebrow">Watch & listen</p>
+          <h2 class="section-title">Wherever<br /><span class="italic">you are.</span></h2>
+          <p>Sermons on YouTube and the Emmanuel Makandiwa podcast on Spotify. Stream on Wi-Fi or download for later.</p>
+          <a href="/watch/" class="btn">Open the hub</a>
+        </div>
+      </div>
+      <div>
+        <p class="eyebrow">Upcoming</p>
+        <h2 class="section-title" data-split>Events</h2>
+        <ul class="event-list">
+          {
+            events.map((e) => (
+              <li data-reveal="up">
+                <a href="/events/">
+                  <time datetime={e.data.start.toISOString()}>{dateFmt.format(e.data.start)}</time>
+                  <span>
+                    <strong>{e.data.title}</strong>
+                    <span class="dim">{e.data.location}</span>
+                  </span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <a href="/events/" class="btn btn--ghost" data-reveal="up">All events</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9 · Give -->
+  <section class="give-band grain">
+    <div class="container give-band__inner">
+      <h2 data-split>Partner with<br /><span class="italic">the vision.</span></h2>
+      <a href="/give/" class="btn" data-magnetic>Give today</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Hero */
+  .hero {
+    position: relative;
+    height: 100svh;
+    min-height: 600px;
+    overflow: clip;
+  }
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    clip-path: inset(0 0 0 0 round 0px);
+    will-change: clip-path, transform;
+  }
+  .hero__media :global(.hero__film) {
+    width: 100%;
+    height: 100%;
+  }
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: clamp(5rem, 12vh, 9rem);
+  }
+  .hero__title {
+    font-size: var(--fs-mega);
+    line-height: 0.92;
+    margin-bottom: 2.5rem;
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  .hero__scroll {
+    position: absolute;
+    z-index: 2;
+    left: 50%;
+    bottom: 1.5rem;
+    transform: translateX(-50%);
+    display: grid;
+    justify-items: center;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    opacity: 0.7;
+  }
+  .hero__scroll span {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(var(--c-accent), transparent);
+    animation: scrollcue 2s var(--ease-in-out) infinite;
+    transform-origin: top;
+  }
+  @keyframes scrollcue {
+    0% { transform: scaleY(0); }
+    50% { transform: scaleY(1); transform-origin: top; }
+    51% { transform-origin: bottom; }
+    100% { transform: scaleY(0); transform-origin: bottom; }
+  }
+
+  /* Intro */
+  .intro__grid {
+    display: grid;
+    grid-template-columns: 1.3fr 0.7fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .intro__statement {
+    font-family: var(--ff-display);
+    font-size: clamp(1.7rem, 3.4vw, 3.1rem);
+    line-height: 1.2;
+    margin-bottom: 2.5rem;
+  }
+  .intro__portrait {
+    display: block;
+    aspect-ratio: 4 / 5;
+  }
+  .intro__portrait :global(img) {
+    width: 100%;
+    height: 116%;
+    object-fit: cover;
+  }
+
+  /* Ribbon */
+  .ribbon {
+    overflow: hidden;
+    white-space: nowrap;
+    padding-block: 1.6rem;
+    border-block: 1px solid var(--c-line);
+  }
+  .ribbon__track {
+    display: inline-flex;
+    font-family: var(--ff-display);
+    font-size: clamp(2rem, 5vw, 4rem);
+    font-style: italic;
+  }
+  .ribbon__track i {
+    font-style: normal;
+    color: var(--c-accent);
+    font-size: 0.5em;
+    vertical-align: middle;
+    margin-inline: 0.6em;
+  }
+
+  .messages-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 4vw, 3.5rem) clamp(1.5rem, 3vw, 2.5rem);
+  }
+  .messages-grid__featured {
+    grid-column: 1 / -1;
+  }
+
+  /* Stories */
+  .stories {
+    overflow: hidden;
+    background: var(--c-ink-2);
+  }
+  .stories__track {
+    display: flex;
+    gap: clamp(1.5rem, 3vw, 3rem);
+    padding: var(--section) var(--gutter);
+    width: max-content;
+    align-items: center;
+  }
+  .stories__intro {
+    width: min(30rem, 80vw);
+    flex-shrink: 0;
+    padding-right: 2rem;
+  }
+  .story {
+    width: min(26rem, 78vw);
+    flex-shrink: 0;
+  }
+  .story__media {
+    aspect-ratio: 3 / 4;
+    margin-bottom: 1.25rem;
+  }
+  .story__media :global(img) {
+    width: 124%;
+    max-width: none;
+    height: 100%;
+    margin-left: -12%;
+    object-fit: cover;
+  }
+  .story__num {
+    font-size: var(--fs-eyebrow);
+    color: var(--c-accent);
+    letter-spacing: 0.2em;
+  }
+  .story h3 {
+    font-size: var(--fs-h3);
+    margin: 0.4rem 0 0.6rem;
+  }
+  /* Native swipe row whenever the pinned scroll isn't running. */
+  :global(html[data-motion='reduced']) .stories__track {
+    width: auto;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+  }
+  :global(html[data-motion='reduced']) .story,
+  :global(html[data-motion='reduced']) .stories__intro {
+    scroll-snap-align: start;
+  }
+  @media (max-width: 899px) {
+    .stories__track {
+      width: auto;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding-block: var(--section);
+      scrollbar-width: none;
+    }
+    .story,
+    .stories__intro {
+      scroll-snap-align: start;
+    }
+  }
+
+  /* Numbers */
+  .numbers__grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .numbers :global(.numbers__emblem) {
+    width: 100%;
+    max-width: 380px;
+    color: var(--c-accent);
+  }
+  .numbers__stats {
+    display: grid;
+    gap: 2.5rem;
+  }
+  .numbers__stats div {
+    display: grid;
+    grid-template-columns: 11rem 1fr;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--c-line-ink);
+  }
+  .numbers__stats strong {
+    font-family: var(--ff-display);
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 1;
+    font-weight: 600;
+  }
+
+  /* Books */
+  .books-teaser__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .books-fan {
+    position: relative;
+    height: clamp(320px, 40vw, 460px);
+  }
+  .books-fan__item {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: clamp(150px, 16vw, 220px);
+    aspect-ratio: 2 / 3;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 30px 60px rgb(0 0 0 / 0.45);
+    transform: translate(-50%, -50%) translateX(calc((var(--i) - 1) * 62%)) rotate(calc((var(--i) - 1) * 9deg));
+    transition: transform 0.8s var(--ease-out);
+  }
+  .books-fan__item:nth-child(2) {
+    z-index: 2;
+  }
+  .books-fan:hover .books-fan__item {
+    transform: translate(-50%, -50%) translateX(calc((var(--i) - 1) * 85%)) rotate(calc((var(--i) - 1) * 4deg)) translateY(-8px);
+  }
+  .books-fan__item :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Watch + events */
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: start;
+  }
+  .watch-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    min-height: 520px;
+    display: flex;
+    align-items: flex-end;
+    color: var(--c-text);
+  }
+  .watch-card :global(.watch-card__bg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .watch-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(transparent 20%, rgb(13 18 32 / 0.9));
+  }
+  .watch-card__body {
+    position: relative;
+    z-index: 2;
+    padding: clamp(1.5rem, 4vw, 3rem);
+  }
+  .watch-card .eyebrow {
+    color: var(--c-accent);
+  }
+  .event-list {
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 0;
+  }
+  .event-list a {
+    display: grid;
+    grid-template-columns: 6rem 1fr;
+    gap: 1.5rem;
+    padding-block: 1.4rem;
+    border-bottom: 1px solid var(--c-line-ink);
+    transition: padding var(--dur) var(--ease-out);
+  }
+  .event-list a:hover {
+    padding-left: 0.75rem;
+  }
+  .event-list time {
+    font-family: var(--ff-display);
+    font-size: 1.6rem;
+    color: color-mix(in oklab, var(--c-accent) 70%, black);
+  }
+  .event-list strong {
+    display: block;
+    font-weight: 600;
+  }
+
+  /* Give band */
+  .give-band {
+    position: relative;
+    overflow: hidden;
+    padding-block: clamp(5rem, 10vw, 9rem);
+    background:
+      radial-gradient(60% 120% at 20% 50%, color-mix(in oklab, var(--c-accent) 35%, transparent), transparent 70%),
+      var(--c-ink);
+  }
+  .give-band__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+  }
+  .give-band h2 {
+    font-size: var(--fs-h1);
+  }
+
+  @media (max-width: 900px) {
+    .intro__grid,
+    .numbers__grid,
+    .books-teaser__grid,
+    .split,
+    .messages-grid {
+      grid-template-columns: 1fr;
+    }
+    .numbers__stats div {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    .section-head {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>
